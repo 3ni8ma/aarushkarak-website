@@ -29,8 +29,8 @@ export default function AnimatedCounter({ end, suffix = '', label, sub, accent =
         </motion.span>
         {suffix}
       </motion.span>
-      <span className="text-sm text-muted mt-2 block">{label}</span>
-      {sub && <span className="text-xs text-muted/60 mt-1 block">{sub}</span>}
+      <span className="text-sm text-pop-primary mt-2 block">{label}</span>
+      {sub && <span className="text-xs text-pop-accent mt-1 block">{sub}</span>}
     </div>
   )
 }

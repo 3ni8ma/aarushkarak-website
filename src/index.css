@@ -53,6 +53,36 @@
   .gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent;
   }
+  .gradient-text-shimmer {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent;
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
+  }
+  .frosted {
+    background: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.5rem;
+  }
+  .text-glow-primary {
+    text-shadow: 0 0 40px rgba(217, 70, 239, 0.3), 0 0 80px rgba(217, 70, 239, 0.15);
+  }
+  .text-glow-secondary {
+    text-shadow: 0 0 40px rgba(99, 102, 241, 0.3), 0 0 80px rgba(99, 102, 241, 0.15);
+  }
+  .text-glow-accent {
+    text-shadow: 0 0 40px rgba(34, 211, 238, 0.3), 0 0 80px rgba(34, 211, 238, 0.15);
+  }
+  .text-pop-primary {
+    color: #f9a8d4;
+  }
+  .text-pop-secondary {
+    color: #a5b4fc;
+  }
+  .text-pop-accent {
+    color: #67e8f9;
+  }
   .section-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28;
   }
@@ -94,6 +124,11 @@
 @keyframes glow-pulse {
   0%, 100% { box-shadow: 0 0 30px rgba(217,70,239,0.3), 0 0 60px rgba(99,102,241,0.15); }
   50% { box-shadow: 0 0 50px rgba(217,70,239,0.6), 0 0 100px rgba(99,102,241,0.3); }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .bg-grain {

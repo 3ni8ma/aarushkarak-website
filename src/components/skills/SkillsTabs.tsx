@@ -75,7 +75,7 @@ export default function SkillsTabs() {
                 ) : active === 'certifications' ? (
                   <ul className="space-y-4">
                     {certifications.map((cert, i) => (
-                      <li key={cert.name} className="flex items-start gap-3 text-sm text-muted">
+                      <li key={cert.name} className="flex items-start gap-3 text-sm text-pop-primary">
                         <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${i % 3 === 0 ? 'bg-primary shadow-[0_0_8px_rgba(217,70,239,0.5)]' : i % 3 === 1 ? 'bg-secondary shadow-[0_0_8px_rgba(99,102,241,0.5)]' : 'bg-accent shadow-[0_0_8px_rgba(34,211,238,0.5)]'}`} />
                         {'file' in cert ? (
                           <a href={cert.file} target="_blank" rel="noopener noreferrer" className="hover:text-light transition-colors inline-flex items-center gap-1.5">
@@ -94,7 +94,7 @@ export default function SkillsTabs() {
                 ) : (
                   <ul className="space-y-4">
                     {honors.map((item, i) => (
-                      <li key={item} className="flex items-start gap-3 text-sm text-muted">
+                      <li key={item} className="flex items-start gap-3 text-sm text-pop-accent">
                         <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${i % 3 === 0 ? 'bg-primary shadow-[0_0_8px_rgba(217,70,239,0.5)]' : i % 3 === 1 ? 'bg-secondary shadow-[0_0_8px_rgba(99,102,241,0.5)]' : 'bg-accent shadow-[0_0_8px_rgba(34,211,238,0.5)]'}`} />
                         {item}
                       </li>

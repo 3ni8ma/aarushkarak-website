@@ -21,25 +21,27 @@ export default function ContactSection() {
         <SectionHeading>Get in Touch</SectionHeading>
         <div className="grid md:grid-cols-5 gap-10">
           <div className="md:col-span-2 space-y-6">
-            <p className="text-muted leading-relaxed text-base">Have a project, collaboration, or just want to connect? I'm always open to discussing new opportunities.</p>
+            <div className="frosted p-6">
+              <p className="text-pop-accent leading-relaxed text-base font-normal">Have a project, collaboration, or just want to connect? I'm always open to discussing new opportunities.</p>
+            </div>
             <div className="space-y-4">
-              <a href="mailto:worldshaans@gmail.com" className="flex items-center gap-4 text-sm text-muted hover:text-primary transition-colors group">
+              <a href="mailto:worldshaans@gmail.com" className="flex items-center gap-4 text-sm text-pop-primary hover:text-primary transition-colors group">
                 <div className="w-12 h-12 rounded-xl glass flex items-center justify-center group-hover:bg-primary/10 transition-colors"><Mail size={20} /></div>
                 <span>worldshaans@gmail.com</span>
               </a>
-              <a href="https://www.linkedin.com/in/aarush-karak-260257321" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-sm text-muted hover:text-secondary transition-colors group">
+              <a href="https://www.linkedin.com/in/aarush-karak-260257321" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-sm text-pop-secondary hover:text-secondary transition-colors group">
                 <div className="w-12 h-12 rounded-xl glass flex items-center justify-center group-hover:bg-secondary/10 transition-colors">
                   <img src="/images/logos/linkedin.svg" alt="LinkedIn" className="w-6 h-6" />
                 </div>
                 <span>linkedin.com/in/aarush-karak</span>
               </a>
-              <a href="https://github.com/3ni8ma" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-sm text-muted hover:text-light transition-colors group">
+              <a href="https://github.com/3ni8ma" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 text-sm text-pop-accent hover:text-light transition-colors group">
                 <div className="w-12 h-12 rounded-xl glass flex items-center justify-center group-hover:bg-white/10 transition-colors">
                   <img src="/images/logos/github.svg" alt="GitHub" className="w-6 h-6" />
                 </div>
                 <span>github.com/3ni8ma</span>
               </a>
-              <div className="flex items-center gap-4 text-sm text-muted">
+              <div className="flex items-center gap-4 text-sm text-pop-primary">
                 <div className="w-12 h-12 rounded-xl glass flex items-center justify-center"><MapPin size={20} /></div>
                 <span>Greater Toronto Area, Canada</span>
               </div>

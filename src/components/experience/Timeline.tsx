@@ -58,7 +58,7 @@ export default function Timeline() {
                   <span className="text-xs font-semibold text-primary/70 uppercase tracking-widest">{exp.period}</span>
                   <h3 className="text-xl font-heading font-bold text-light mt-2">{exp.role}</h3>
                   <CompanyLogo company={exp.company} />
-                  <p className="text-sm text-muted leading-relaxed mt-2">{exp.desc}</p>
+                  <p className="text-sm text-pop-secondary leading-relaxed mt-2 font-normal">{exp.desc}</p>
                 </div>
               </div>
               <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-primary border-4 border-dark -translate-x-2 md:-translate-x-2 mt-8 z-10 shadow-[0_0_16px_rgba(217,70,239,0.5)]" />
