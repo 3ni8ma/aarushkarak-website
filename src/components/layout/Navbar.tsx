@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, FileText } from 'lucide-react'
 
 const links = [
   { to: '/', label: 'Home' },
@@ -32,6 +32,15 @@ export default function Navbar() {
             AK<span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">.</span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm font-medium text-muted hover:text-light transition-all duration-200"
+            >
+              <FileText size={14} />
+              Resume
+            </a>
             {links.map(l => (
               <Link
                 key={l.to}
@@ -64,6 +73,16 @@ export default function Navbar() {
                 {l.label}
               </Link>
             ))}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-light transition-colors"
+            >
+              <FileText size={14} />
+              Resume
+            </a>
           </div>
         </div>
       )}
