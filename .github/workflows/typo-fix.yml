@@ -1,0 +1,43 @@
+name: Weekly Typo Fix PRs
+
+on:
+  schedule:
+    - cron: "0 10 * * 1"
+  workflow_dispatch:
+
+jobs:
+  typo-prs:
+    runs-on: ubuntu-latest
+    if: github.repository == '3ni8ma/aarushkarak-website'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install cspell
+        run: npm install -g cspell
+      - name: Find and fix typos in popular repos
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          TARGET_REPOS=(
+            "vitejs/vite"
+            "tailwindlabs/tailwindcss"
+            "reactjs/reactjs.org"
+            "vercel/next.js"
+            "facebook/react"
+          )
+          mkdir -p /tmp/typo-fixes
+          for repo in "${TARGET_REPOS[@]}"; do
+            echo "=== Scanning $repo ==="
+            git clone --depth 1 "https://oauth:${GH_TOKEN}@github.com/${repo}" "/tmp/typo-fixes/$(basename $repo)" 2>/dev/null || continue
+            cd "/tmp/typo-fixes/$(basename $repo)"
+            npx cspell "**/*.md" --no-progress --words-only 2>/dev/null | sort -u | head -5 > /tmp/typos.txt || true
+            if [ -s /tmp/typos.txt ]; then
+              echo "Found potential typos in $repo"
+              cat /tmp/typos.txt
+            fi
+            cd /tmp
+          done
+      - name: Log results
+        run: echo "Typo scan complete — review typos found and submit PRs manually"
