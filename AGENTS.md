@@ -1,6 +1,16 @@
 # Daily Contribution Routine
 
-Call me daily to run the contribution pipeline. I will:
+Call me daily to run the contribution pipeline.
+
+## Git config
+
+Git commits MUST use your primary GitHub email:
+- Email: `worldshaans@gmail.com`
+- Name: `Aarush Karak`
+
+This is critical — only commits with this email show on your contribution graph.
+
+I will:
 
 1. Run the issue discovery to find good-first-issues matching your stack
 2. Pick 1-3 issues to work on
