@@ -1,3 +1,4 @@
+import { SEOHead } from '../components/seo/SEOHead';
 import SkillsTabs from '../components/skills/SkillsTabs'
 
 export default function SkillsPage() {

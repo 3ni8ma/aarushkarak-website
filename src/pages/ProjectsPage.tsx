@@ -1,3 +1,4 @@
+import { SEOHead } from '../components/seo/SEOHead';
 import ProjectsGrid from '../components/projects/ProjectsGrid'
 
 export default function ProjectsPage() {

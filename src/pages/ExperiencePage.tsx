@@ -1,3 +1,4 @@
+import { SEOHead } from '../components/seo/SEOHead';
 import Timeline from '../components/experience/Timeline'
 
 export default function ExperiencePage() {

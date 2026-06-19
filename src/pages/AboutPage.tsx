@@ -1,3 +1,4 @@
+import { SEOHead } from '../components/seo/SEOHead';
 import BioSection from '../components/about/BioSection'
 
 export default function AboutPage() {

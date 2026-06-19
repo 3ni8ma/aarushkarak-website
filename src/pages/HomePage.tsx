@@ -1,3 +1,4 @@
+import { SEOHead } from '../components/seo/SEOHead';
 import HeroSection from '../components/home/HeroSection'
 import QuickStats from '../components/home/QuickStats'
 import FeaturedPreview from '../components/home/FeaturedPreview'
