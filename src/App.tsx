@@ -1,1 +1,49 @@
-import { Routes, Route, useLocation } from 'react-router-dom'\nimport { AnimatePresence } from 'framer-motion'\nimport Navbar from './components/layout/Navbar'\nimport Footer from './components/layout/Footer'\nimport PageTransition from './components/layout/PageTransition'\nimport { lazy } from 'react';\nconst HomePage = lazy(() => import('./pages/HomePagePage'));\nimport { lazy } from 'react';\nconst AboutPage = lazy(() => import('./pages/AboutPagePage'));\nimport { lazy } from 'react';\nconst ExperiencePage = lazy(() => import('./pages/ExperiencePagePage'));\nimport { lazy } from 'react';\nconst ProjectsPage = lazy(() => import('./pages/ProjectsPagePage'));\nimport { lazy } from 'react';\nconst SkillsPage = lazy(() => import('./pages/SkillsPagePage'));\nimport { lazy } from 'react';\nconst ContactPage = lazy(() => import('./pages/ContactPagePage'));\n\nfunction App() {\n  const location = useLocation()\n\n  return (\n    <div className="min-h-screen bg-dark">\n      <Navbar />\n      <AnimatePresence mode="wait">\n        <Routes location={location} key={location.pathname}>\n          <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />\n          <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />\n          <Route path="/experience" element={<PageTransition><ExperiencePage /></PageTransition>} />\n          <Route path="/projects" element={<PageTransition><ProjectsPage /></PageTransition>} />\n          <Route path="/skills" element={<PageTransition><SkillsPage /></PageTransition>} />\n          <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />\n        </Routes>\n      </AnimatePresence>\n      <Footer />\n    </div>\n  )\n}\n\nexport default App\n
+import { lazy, Suspense } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
+import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
+import PageTransition from './components/layout/PageTransition'
+
+const HomePage = lazy(() => import('./pages/HomePage'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
+const ExperiencePage = lazy(() => import('./pages/ExperiencePage'))
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'))
+const SkillsPage = lazy(() => import('./pages/SkillsPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+
+function Fallback() {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+}
+
+function App() {
+  const location = useLocation()
+
+  return (
+    <div className="min-h-screen bg-dark">
+      <Navbar />
+      <Suspense fallback={<Fallback />}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
+            <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
+            <Route path="/experience" element={<PageTransition><ExperiencePage /></PageTransition>} />
+            <Route path="/projects" element={<PageTransition><ProjectsPage /></PageTransition>} />
+            <Route path="/skills" element={<PageTransition><SkillsPage /></PageTransition>} />
+            <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+            <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
+          </Routes>
+        </AnimatePresence>
+      </Suspense>
+      <Footer />
+    </div>
+  )
+}
+
+export default App
+

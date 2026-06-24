@@ -6,6 +6,7 @@ import FeaturedPreview from '../components/home/FeaturedPreview'
 export default function HomePage() {
   return (
     <div className="relative">
+      <SEOHead path="/" />
       <div className="fixed inset-0 z-0 overflow-hidden">
         <img src="/images/bg/home.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" />
         <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/20 to-dark/90" />

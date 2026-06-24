@@ -1,4 +1,4 @@
-import AnimatedCounter from '../ui/AnimatedCounter'
+import { AnimatedCounter } from '../ui/AnimatedCounter'
 
 export default function QuickStats() {
   return (
