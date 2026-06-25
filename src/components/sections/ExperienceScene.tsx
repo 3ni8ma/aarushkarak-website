@@ -16,23 +16,20 @@ const experiences = [
 
 function TimelinePath() {
   const colors = useThemeColors()
-  const points = useMemo(() => {
+
+  const geometry = useMemo(() => {
     const pts: THREE.Vector3[] = []
-    for (let i = 0; i < 60; i++) {
-      const t = (i / 59) * Math.PI * 0.5 - 0.1
+    for (let i = 0; i < 30; i++) {
+      const t = (i / 29) * Math.PI * 0.5 - 0.1
       const r = 5 - t * 1.5
       const x = Math.sin(t) * r
       const z = -Math.cos(t) * r - 1
       const y = Math.sin(t * 3) * 0.3
       pts.push(new THREE.Vector3(x, y, z))
     }
-    return pts
+    const curve = new THREE.CatmullRomCurve3(pts)
+    return new THREE.TubeGeometry(curve, 32, 0.02, 3, false)
   }, [])
-
-  const geometry = useMemo(() => {
-    const curve = new THREE.CatmullRomCurve3(points)
-    return new THREE.TubeGeometry(curve, 64, 0.02, 4, false)
-  }, [points])
 
   const material = useMemo(() => new THREE.MeshBasicMaterial({
     color: colors.primary,
@@ -64,11 +61,11 @@ function ExperienceNode({ index, total, color }: { index: number; total: number;
   return (
     <group position={[x, y, z]}>
       <mesh ref={meshRef}>
-        <sphereGeometry args={[0.12, 16, 16]} />
+        <sphereGeometry args={[0.12, 12, 12]} />
         <meshBasicMaterial color={color} />
       </mesh>
       <mesh>
-        <ringGeometry args={[0.18, 0.22, 24]} />
+        <ringGeometry args={[0.18, 0.22, 16]} />
         <meshBasicMaterial color={color} transparent opacity={0.3} side={THREE.DoubleSide} />
       </mesh>
     </group>
@@ -109,13 +106,13 @@ function SceneContent() {
           <ExperienceNode key={i} index={i} total={experiences.length} color={c} />
         )
       })}
-      {Array.from({ length: 3 }).map((_, i) => {
-        const c = [colors.primary, colors.secondary, colors.accent][i]
+      {Array.from({ length: 2 }).map((_, i) => {
+        const c = [colors.primary, colors.secondary][i]
         return (
           <FloatingGeometry
             key={`bg-${i}`}
             shape="dodecahedron"
-            position={[(-2 + i * 2) * 2.5, 2 - i * 1.5, -6 - i * 2]}
+            position={[(-1 + i * 2) * 2.5, 1 - i * 1.5, -6 - i * 2]}
             color={c}
             size={0.25}
             speed={0.3 + i * 0.1}

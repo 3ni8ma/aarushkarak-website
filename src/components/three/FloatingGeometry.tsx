@@ -14,13 +14,18 @@ interface FloatingGeometryProps {
   rotationIntensity?: number
   floatIntensity?: number
   opacity?: number
-  wireframe?: boolean
 }
+
+const isMobile = typeof window !== 'undefined' && (
+  'ontouchstart' in window ||
+  navigator.maxTouchPoints > 0 ||
+  window.innerWidth < 768
+)
 
 function createGeometry(shape: ShapeType) {
   switch (shape) {
     case 'torusKnot':
-      return new THREE.TorusKnotGeometry(1, 0.35, 64, 8)
+      return new THREE.TorusKnotGeometry(1, 0.35, isMobile ? 24 : 32, isMobile ? 4 : 6)
     case 'octahedron':
       return new THREE.OctahedronGeometry(1)
     case 'icosahedron':
@@ -39,7 +44,6 @@ export default function FloatingGeometry({
   rotationIntensity = 0.5,
   floatIntensity = 0.5,
   opacity = 0.6,
-  wireframe = false,
 }: FloatingGeometryProps) {
   const groupRef = useRef<Group>(null)
 
@@ -59,18 +63,8 @@ export default function FloatingGeometry({
             color={matColor}
             transparent
             opacity={opacity}
-            wireframe={wireframe}
-            metalness={0.2}
-            roughness={0.3}
-            envMapIntensity={0.5}
-          />
-        </mesh>
-        <mesh geometry={geometry} scale={size * 1.02}>
-          <meshBasicMaterial
-            color={matColor}
-            transparent
-            opacity={0.08}
-            wireframe
+            metalness={0.1}
+            roughness={0.4}
           />
         </mesh>
       </group>

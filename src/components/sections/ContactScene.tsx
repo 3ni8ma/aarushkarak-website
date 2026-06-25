@@ -1,15 +1,20 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useThemeColors } from '../../hooks/useThemeColors'
 import SceneManager from '../three/SceneManager'
 
+const isMobile = typeof window !== 'undefined' && (
+  'ontouchstart' in window ||
+  navigator.maxTouchPoints > 0 ||
+  window.innerWidth < 768
+)
+
 function ContactParticles() {
   const colors = useThemeColors()
   const pointsRef = useRef<THREE.Points>(null)
   const mouseRef = useRef({ x: 0, y: 0 })
-
-  const count = 200
+  const count = isMobile ? 60 : 120
 
   const [positions, colorArray] = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -45,9 +50,8 @@ function ContactParticles() {
   }), [])
 
   const initialPositions = useMemo(() => new Float32Array(positions), [positions])
-  const timeRef = useRef(0)
 
-  useMemo(() => {
+  useEffect(() => {
     function onMouse(e: MouseEvent) {
       mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1
       mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1
@@ -56,6 +60,9 @@ function ContactParticles() {
     return () => window.removeEventListener('mousemove', onMouse)
   }, [])
 
+  const timeRef = useRef(0)
+  const skipRef = useRef(0)
+
   useFrame((_, delta) => {
     if (!pointsRef.current) return
     const pos = pointsRef.current.geometry.attributes.position.array as Float32Array
@@ -63,14 +70,14 @@ function ContactParticles() {
     const my = mouseRef.current.y * 0.3
     timeRef.current += delta * 0.3
 
+    skipRef.current = (skipRef.current + 1) % (isMobile ? 3 : 1)
+    if (isMobile && skipRef.current !== 0) return
+
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
-      const ox = initialPositions[i3]
-      const oy = initialPositions[i3 + 1]
-      const oz = initialPositions[i3 + 2]
-      pos[i3] = ox + Math.sin(timeRef.current + i) * 0.1 + mx * 0.2
-      pos[i3 + 1] = oy + Math.cos(timeRef.current * 0.7 + i * 0.5) * 0.1 + my * 0.2
-      pos[i3 + 2] = oz + Math.sin(timeRef.current * 0.5 + i * 0.3) * 0.1
+      pos[i3] = initialPositions[i3] + Math.sin(timeRef.current + i) * 0.1 + mx * 0.2
+      pos[i3 + 1] = initialPositions[i3 + 1] + Math.cos(timeRef.current * 0.7 + i * 0.5) * 0.1 + my * 0.2
+      pos[i3 + 2] = initialPositions[i3 + 2] + Math.sin(timeRef.current * 0.5 + i * 0.3) * 0.1
     }
     pointsRef.current.geometry.attributes.position.needsUpdate = true
   })

@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useThemeColors } from '../../hooks/useThemeColors'
@@ -46,7 +46,7 @@ function SkillParticles() {
     sizeAttenuation: true,
   }), [])
 
-  useMemo(() => {
+  useEffect(() => {
     function onMouse(e: MouseEvent) {
       mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1
       mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1

@@ -1,13 +1,11 @@
-import { lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { SEOHead } from '../components/seo/SEOHead'
+import SceneLoader from '../components/three/SceneLoader'
 import HeroSection from '../components/home/HeroSection'
 import QuickStats from '../components/home/QuickStats'
 import FeaturedPreview from '../components/home/FeaturedPreview'
 import ScrollReveal from '../components/ui/ScrollReveal'
 import { ArrowRight, Cpu, Globe, Box, DollarSign } from 'lucide-react'
-
-const HeroScene = lazy(() => import('../components/home/HeroScene'))
 
 const items = [
   { id: 'ai', title: 'AI Developer', icon: Cpu, desc: 'Building intelligent systems with machine learning, deep learning, and natural language processing.', tags: ['Python', 'TensorFlow', 'LLMs', 'NLP'] },
@@ -20,9 +18,7 @@ export default function HomePage() {
   return (
     <div className="relative">
       <SEOHead path="/" />
-      <Suspense fallback={null}>
-        <HeroScene />
-      </Suspense>
+      <SceneLoader load={() => import('../components/home/HeroScene')} />
       <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
         <img src="/images/bg/home.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/20 to-dark/90" />

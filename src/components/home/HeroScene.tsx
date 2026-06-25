@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 import * as THREE from 'three'
@@ -6,10 +6,25 @@ import { useThemeColors } from '../../hooks/useThemeColors'
 import SceneManager from '../three/SceneManager'
 import FloatingGeometry from '../three/FloatingGeometry'
 
+const isMobile = typeof window !== 'undefined' && (
+  'ontouchstart' in window ||
+  navigator.maxTouchPoints > 0 ||
+  window.innerWidth < 768
+)
+
 function MouseTracker() {
   const targetRef = useRef({ x: 0, y: 0 })
   const currentRef = useRef({ x: 0, y: 0 })
   const groupRef = useRef<THREE.Group>(null)
+
+  useEffect(() => {
+    function onMouse(e: MouseEvent) {
+      targetRef.current.x = (e.clientX / window.innerWidth) * 2 - 1
+      targetRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1
+    }
+    window.addEventListener('mousemove', onMouse, { passive: true })
+    return () => window.removeEventListener('mousemove', onMouse)
+  }, [])
 
   useFrame(() => {
     currentRef.current.x += (targetRef.current.x - currentRef.current.x) * 0.03
@@ -20,20 +35,12 @@ function MouseTracker() {
     }
   })
 
-  useMemo(() => {
-    function onMouse(e: MouseEvent) {
-      targetRef.current.x = (e.clientX / window.innerWidth) * 2 - 1
-      targetRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1
-    }
-    window.addEventListener('mousemove', onMouse, { passive: true })
-    return () => window.removeEventListener('mousemove', onMouse)
-  }, [])
-
   return <group ref={groupRef} />
 }
 
-function HeroParticles({ count = 300 }: { count?: number }) {
+function HeroParticles() {
   const colors = useThemeColors()
+  const count = isMobile ? 80 : 200
 
   const [positions, sizes, colorArray] = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -82,65 +89,29 @@ function HeroParticles({ count = 300 }: { count?: number }) {
 export default function HeroScene() {
   const colors = useThemeColors()
 
+  const geometries = useMemo(() => {
+    if (isMobile) return [
+      { shape: 'torusKnot' as const, pos: [-4.5, 2.5, -4] as [number, number, number], color: colors.primary, size: 0.5, opacity: 0.5 },
+      { shape: 'icosahedron' as const, pos: [5, -1.5, -3] as [number, number, number], color: colors.secondary, size: 0.4, opacity: 0.4 },
+    ]
+    return [
+      { shape: 'torusKnot' as const, pos: [-4.5, 2.5, -4] as [number, number, number], color: colors.primary, size: 0.5, opacity: 0.5 },
+      { shape: 'icosahedron' as const, pos: [5, -1.5, -3] as [number, number, number], color: colors.secondary, size: 0.4, opacity: 0.4 },
+      { shape: 'dodecahedron' as const, pos: [-3, -2.5, -6] as [number, number, number], color: colors.accent, size: 0.35, opacity: 0.35 },
+      { shape: 'octahedron' as const, pos: [4, 3, -5] as [number, number, number], color: colors.primary, size: 0.3, opacity: 0.45 },
+      { shape: 'torusKnot' as const, pos: [0, -3, -7] as [number, number, number], color: colors.accent, size: 0.45, opacity: 0.3 },
+    ]
+  }, [colors])
+
   return (
     <SceneManager cameraZ={10}>
       <MouseTracker />
-      <HeroParticles count={400} />
-
-      <Float speed={0.5} rotationIntensity={0.3} floatIntensity={0.4}>
-        <FloatingGeometry
-          shape="torusKnot"
-          position={[-4.5, 2.5, -4]}
-          color={colors.primary}
-          size={0.5}
-          speed={1.2}
-          opacity={0.5}
-        />
-      </Float>
-
-      <Float speed={0.7} rotationIntensity={0.4} floatIntensity={0.3}>
-        <FloatingGeometry
-          shape="icosahedron"
-          position={[5, -1.5, -3]}
-          color={colors.secondary}
-          size={0.4}
-          speed={0.8}
-          opacity={0.4}
-        />
-      </Float>
-
-      <Float speed={0.4} rotationIntensity={0.2} floatIntensity={0.5}>
-        <FloatingGeometry
-          shape="dodecahedron"
-          position={[-3, -2.5, -6]}
-          color={colors.accent}
-          size={0.35}
-          speed={1.5}
-          opacity={0.35}
-        />
-      </Float>
-
-      <Float speed={0.6} rotationIntensity={0.35} floatIntensity={0.4}>
-        <FloatingGeometry
-          shape="octahedron"
-          position={[4, 3, -5]}
-          color={colors.primary}
-          size={0.3}
-          speed={0.9}
-          opacity={0.45}
-        />
-      </Float>
-
-      <Float speed={0.3} rotationIntensity={0.25} floatIntensity={0.35}>
-        <FloatingGeometry
-          shape="torusKnot"
-          position={[0, -3, -7]}
-          color={colors.accent}
-          size={0.45}
-          speed={1.1}
-          opacity={0.3}
-        />
-      </Float>
+      <HeroParticles />
+      {geometries.map((g, i) => (
+        <Float key={i} speed={0.4 + i * 0.1} rotationIntensity={0.2 + i * 0.05} floatIntensity={0.3 + i * 0.05}>
+          <FloatingGeometry shape={g.shape} position={g.pos} color={g.color} size={g.size} speed={1} opacity={g.opacity} />
+        </Float>
+      ))}
     </SceneManager>
   )
 }

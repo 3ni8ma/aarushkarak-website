@@ -1,17 +1,13 @@
-import { lazy, Suspense } from 'react'
 import { SEOHead } from '../components/seo/SEOHead'
+import SceneLoader from '../components/three/SceneLoader'
 import AboutSection from '../components/sections/AboutSection'
 import WhatIDo from '../components/sections/WhatIDo'
-
-const AboutScene = lazy(() => import('../components/sections/AboutScene'))
 
 export default function AboutPage() {
   return (
     <div className="relative">
       <SEOHead path="/about" title="About" description="Learn more about Aarush Karak — full-stack developer, spatial computing engineer, and founder of The Coder Bros." />
-      <Suspense fallback={null}>
-        <AboutScene />
-      </Suspense>
+      <SceneLoader load={() => import('../components/sections/AboutScene')} />
       <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
         <img src="/images/bg/about.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/30 to-dark/95" />
