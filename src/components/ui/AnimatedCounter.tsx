@@ -7,9 +7,11 @@ interface AnimatedCounterProps {
   suffix?: string;
   duration?: number;
   label?: string;
+  sub?: string;
+  accent?: string;
 }
 
-export function AnimatedCounter({ end, suffix = '', duration = 2000, label }: AnimatedCounterProps) {
+export function AnimatedCounter({ end, suffix = '', duration = 2000, label, sub, accent }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
   const startedRef = useRef(false);
@@ -41,8 +43,9 @@ export function AnimatedCounter({ end, suffix = '', duration = 2000, label }: An
 
   return (
     <div ref={ref} className="text-center">
-      <span className="text-3xl font-bold text-white">{count}{suffix}</span>
+      <span className={`text-3xl font-bold ${accent ? `bg-gradient-to-r ${accent} bg-clip-text text-transparent` : 'text-white'}`}>{count}{suffix}</span>
       {label && <p className="text-sm text-gray-400 mt-1">{label}</p>}
+      {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
     </div>
   );
 }
