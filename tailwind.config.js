@@ -7,50 +7,40 @@ export default {
   theme: {
     extend: {
       colors: {
-        dark: '#0A0A0A',
+        dark: '#0b080c',
         'dark-card': '#151515',
         primary: 'rgb(var(--color-primary) / <alpha-value>)',
         secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
         accent: 'rgb(var(--color-accent) / <alpha-value>)',
-        light: '#FFFFFF',
-        muted: '#A1A1AA',
+        light: '#eae5ec',
+        muted: '#adacac',
       },
       fontFamily: {
-        heading: ['Syne', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        sans: ['Geist', 'sans-serif'],
       },
       maxWidth: {
         '7xl': '80rem',
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
-        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-        'slide-up': 'slideUp 0.5s ease-out forwards',
         'spin-slow': 'spin 8s linear infinite',
         'orb': 'orb 8s ease-in-out infinite',
-        'border-spin': 'border-spin 3s linear infinite',
-        'float-3d': 'float-3d 4s ease-in-out infinite',
-        'sparkle': 'sparkle 2s ease-in-out infinite',
-        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
         'ken-burns': 'ken-burns 15s ease-out forwards',
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-20px)' },
         },
-        pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(var(--color-primary), 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(var(--color-primary), 0.6)' },
-        },
-        slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
         orb: {
           '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
           '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
           '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
         },
       },
     },

@@ -1,17 +1,23 @@
-import { SEOHead } from '../components/seo/SEOHead';
-import ProjectsGrid from '../components/projects/ProjectsGrid'
+import { lazy, Suspense } from 'react'
+import { SEOHead } from '../components/seo/SEOHead'
+import ProjectsSection from '../components/sections/ProjectsSection'
+
+const ThreeBackground = lazy(() => import('../components/home/ThreeBackground'))
 
 export default function ProjectsPage() {
   return (
     <div className="relative">
-      <SEOHead title="Projects" description="Portfolio of projects by Aarush Karak — HELIOS, Finance Hub, Knowledge-Globe, and more." path="/projects" />
+      <SEOHead path="/projects" title="Projects" description="Aarush Karak's projects — HELIOS, Finance Hub, Knowledge-Globe, FixMate." />
+      <Suspense fallback={null}>
+        <ThreeBackground />
+      </Suspense>
       <div className="fixed inset-0 z-0 overflow-hidden">
         <img src="/images/bg/projects.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
-        <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/20 to-dark/90" />
-        <div className="absolute inset-0 bg-grain" />
+        <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/30 to-dark/95" />
+        <div className="absolute inset-0 bg-grain opacity-50" />
       </div>
-      <div className="relative z-10">
-        <ProjectsGrid />
+      <div className="relative z-10 pt-20">
+        <ProjectsSection />
       </div>
     </div>
   )

@@ -1,11 +1,14 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { HelmetProvider } from 'react-helmet-async'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
-import PageTransition from './components/layout/PageTransition'
 import SkipLink from './components/layout/SkipLink'
 import ScrollTopButton from './components/layout/ScrollTopButton'
+import LoadingScreen from './components/loading/LoadingScreen'
+import CustomCursor from './components/cursor/CustomCursor'
+import SmoothScroll from './components/layout/SmoothScroll'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
@@ -13,12 +16,24 @@ const ExperiencePage = lazy(() => import('./pages/ExperiencePage'))
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage'))
 const SkillsPage = lazy(() => import('./pages/SkillsPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+
+function PageTransition({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 function Fallback() {
   return (
     <div className="flex items-center justify-center min-h-[60vh]" role="status" aria-label="Loading page">
-      <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 rounded-full border-t-transparent animate-spin" style={{ borderColor: 'rgba(var(--color-primary), 0.3)', borderTopColor: 'transparent' }} />
       <span className="sr-only">Loading...</span>
     </div>
   )
@@ -28,27 +43,32 @@ function App() {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen bg-dark">
-      <SkipLink />
-      <Navbar />
-      <main id="main-content">
-        <Suspense fallback={<Fallback />}>
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
-              <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
-              <Route path="/experience" element={<PageTransition><ExperiencePage /></PageTransition>} />
-              <Route path="/projects" element={<PageTransition><ProjectsPage /></PageTransition>} />
-              <Route path="/skills" element={<PageTransition><SkillsPage /></PageTransition>} />
-              <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
-              <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
-            </Routes>
-          </AnimatePresence>
-        </Suspense>
-      </main>
-      <Footer />
-      <ScrollTopButton />
-    </div>
+    <HelmetProvider>
+      <div className="min-h-screen bg-dark">
+        <LoadingScreen />
+        <SkipLink />
+        <CustomCursor />
+        <SmoothScroll>
+          <Navbar />
+          <main id="main-content">
+            <Suspense fallback={<Fallback />}>
+              <AnimatePresence mode="wait">
+                <Routes location={location} key={location.pathname}>
+                  <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
+                  <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
+                  <Route path="/experience" element={<PageTransition><ExperiencePage /></PageTransition>} />
+                  <Route path="/projects" element={<PageTransition><ProjectsPage /></PageTransition>} />
+                  <Route path="/skills" element={<PageTransition><SkillsPage /></PageTransition>} />
+                  <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+                </Routes>
+              </AnimatePresence>
+            </Suspense>
+          </main>
+          <Footer />
+        </SmoothScroll>
+        <ScrollTopButton />
+      </div>
+    </HelmetProvider>
   )
 }
 
