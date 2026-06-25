@@ -1,5 +1,4 @@
 import { useState, useEffect, type ComponentType } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
 import SceneFallback from './SceneFallback'
 
 interface SceneLoaderProps {
@@ -32,19 +31,7 @@ export default function SceneLoader({ load }: SceneLoaderProps) {
       >
         {Scene && <Scene />}
       </div>
-      <AnimatePresence>
-        {!ready && (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0"
-          >
-            <SceneFallback />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {!ready && <SceneFallback />}
     </div>
   )
 }
