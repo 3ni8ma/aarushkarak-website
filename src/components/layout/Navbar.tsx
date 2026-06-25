@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FileText } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
@@ -15,6 +15,8 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { pathname } = useLocation()
+  const indicatorRef = useRef<HTMLSpanElement>(null)
+  const navRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     function onScroll() { setScrolled(window.scrollY > 20) }
@@ -22,39 +24,65 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    const indicator = indicatorRef.current
+    const nav = navRef.current
+    if (!indicator || !nav) return
+
+    const activeLink = nav.querySelector(`a[aria-current="page"]`) as HTMLAnchorElement | null
+    if (activeLink) {
+      indicator.style.left = `${activeLink.offsetLeft}px`
+      indicator.style.width = `${activeLink.offsetWidth}px`
+    }
+  }, [pathname])
+
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-dark/90 backdrop-blur-xl border-b border-white/5' : 'bg-transparent'
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      scrolled
+        ? 'bg-dark/80 backdrop-blur-xl border-b border-white/[0.03]'
+        : 'bg-transparent'
     }`} role="navigation" aria-label="Main navigation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="text-xl font-sans font-bold text-light tracking-wide" aria-label="Home page">
-            AK<span style={{ color: 'rgb(var(--color-primary))' }}>.</span>
+          <Link to="/" className="group flex items-center gap-1 text-xl font-sans font-bold tracking-wide" aria-label="Home page">
+            <span className="text-light">AK</span>
+            <span className="text-pop-primary transition-all duration-300 group-hover:shadow-[0_0_12px_rgba(var(--color-primary),0.5)]" style={{ color: 'rgb(var(--color-primary))' }}>.</span>
           </Link>
-          <div className="hidden md:flex items-center gap-8">
-            {links.map(l => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className={`text-sm font-medium transition-all duration-200 ${
-                  pathname === l.to ? 'text-light' : 'text-muted hover:text-light'
-                }`}
-                aria-current={pathname === l.to ? 'page' : undefined}
+          <div className="hidden md:flex items-center gap-1">
+            <div ref={navRef} className="relative flex items-center gap-1 px-1 py-1 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}>
+              <span
+                ref={indicatorRef}
+                className="absolute top-1 bottom-1 rounded-full transition-all duration-400 ease-out pointer-events-none"
+                style={{ backgroundColor: 'rgba(var(--color-primary), 0.1)', left: 0, width: 0 }}
+              />
+              {links.map(l => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className={`relative px-3.5 py-1.5 text-xs font-medium tracking-wide uppercase transition-all duration-200 rounded-full ${
+                    pathname === l.to
+                      ? 'text-light'
+                      : 'text-muted/70 hover:text-light'
+                  }`}
+                  aria-current={pathname === l.to ? 'page' : undefined}
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+            <div className="flex items-center gap-2 ml-3 pl-3" style={{ borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
+              <ThemeToggle />
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs font-medium text-muted/70 hover:text-light transition-all duration-200 px-3 py-1.5 rounded-full hover:bg-white/5"
+                aria-label="Resume (opens in new tab)"
               >
-                {l.label}
-              </Link>
-            ))}
-            <ThemeToggle />
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm font-medium text-muted hover:text-light transition-all duration-200"
-              aria-label="Resume (opens in new tab)"
-            >
-              <FileText size={14} />
-              Resume
-            </a>
+                <FileText size={12} />
+                Resume
+              </a>
+            </div>
           </div>
           <button
             className="md:hidden p-2 text-light"

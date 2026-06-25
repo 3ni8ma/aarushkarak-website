@@ -7,7 +7,7 @@ import FeaturedPreview from '../components/home/FeaturedPreview'
 import ScrollReveal from '../components/ui/ScrollReveal'
 import { ArrowRight, Cpu, Globe, Box, DollarSign } from 'lucide-react'
 
-const ThreeBackground = lazy(() => import('../components/home/ThreeBackground'))
+const HeroScene = lazy(() => import('../components/home/HeroScene'))
 
 const items = [
   { id: 'ai', title: 'AI Developer', icon: Cpu, desc: 'Building intelligent systems with machine learning, deep learning, and natural language processing.', tags: ['Python', 'TensorFlow', 'LLMs', 'NLP'] },
@@ -21,9 +21,9 @@ export default function HomePage() {
     <div className="relative">
       <SEOHead path="/" />
       <Suspense fallback={null}>
-        <ThreeBackground />
+        <HeroScene />
       </Suspense>
-      <div className="fixed inset-0 z-0 overflow-hidden">
+      <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
         <img src="/images/bg/home.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/20 to-dark/90" />
         <div className="absolute inset-0 bg-grain" />

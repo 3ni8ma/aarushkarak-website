@@ -20,10 +20,11 @@ const ContactPage = lazy(() => import('./pages/ContactPage'))
 function PageTransition({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ opacity: 0, y: 30, scale: 0.97, rotateX: 3 }}
+      animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+      exit={{ opacity: 0, y: -20, scale: 0.98, rotateX: -2 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
     >
       {children}
     </motion.div>

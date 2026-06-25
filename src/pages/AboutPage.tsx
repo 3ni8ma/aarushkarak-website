@@ -3,16 +3,16 @@ import { SEOHead } from '../components/seo/SEOHead'
 import AboutSection from '../components/sections/AboutSection'
 import WhatIDo from '../components/sections/WhatIDo'
 
-const ThreeBackground = lazy(() => import('../components/home/ThreeBackground'))
+const AboutScene = lazy(() => import('../components/sections/AboutScene'))
 
 export default function AboutPage() {
   return (
     <div className="relative">
       <SEOHead path="/about" title="About" description="Learn more about Aarush Karak — full-stack developer, spatial computing engineer, and founder of The Coder Bros." />
       <Suspense fallback={null}>
-        <ThreeBackground />
+        <AboutScene />
       </Suspense>
-      <div className="fixed inset-0 z-0 overflow-hidden">
+      <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
         <img src="/images/bg/about.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/30 to-dark/95" />
         <div className="absolute inset-0 bg-grain opacity-50" />

@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowDown, MapPin } from 'lucide-react'
@@ -10,78 +9,11 @@ const sparkles = Array.from({ length: 8 }, (_, i) => ({
 }))
 
 export default function HeroSection() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    let animId: number
-    const particles: { x: number; y: number; vx: number; vy: number; r: number }[] = []
-    for (let i = 0; i < 80; i++) {
-      particles.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 2 + 0.5,
-      })
-    }
-
-    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
-    resize()
-    window.addEventListener('resize', resize)
-
-    function getCSSColor(name: string) {
-      const val = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
-      return val.split(' ').map(Number)
-    }
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      particles.forEach(p => {
-        p.x += p.vx; p.y += p.vy
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1
-      })
-      const pColor = getCSSColor('--color-primary')
-      const sColor = getCSSColor('--color-secondary')
-      particles.forEach(p => {
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4)
-        grad.addColorStop(0, `rgba(${pColor[0]},${pColor[1]},${pColor[2]},0.25)`)
-        grad.addColorStop(1, `rgba(${pColor[0]},${pColor[1]},${pColor[2]},0)`)
-        ctx.fillStyle = grad
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2); ctx.fill()
-      })
-      ctx.strokeStyle = `rgba(${sColor[0]},${sColor[1]},${sColor[2]},0.06)`
-      ctx.lineWidth = 0.5
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const d = Math.sqrt(dx * dx + dy * dy)
-          if (d < 150) {
-            ctx.globalAlpha = 1 - d / 150
-            ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke()
-          }
-        }
-      }
-      ctx.globalAlpha = 1
-      animId = requestAnimationFrame(draw)
-    }
-    draw()
-    return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', resize) }
-  }, [])
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-label="Hero introduction">
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" aria-hidden="true" />
-
-      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full opacity-30 animate-orb pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(var(--color-primary), 0.2) 0%, transparent 70%)', filter: 'blur(60px)' }} aria-hidden="true" />
-      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] rounded-full opacity-30 animate-orb pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(var(--color-secondary), 0.2) 0%, transparent 70%)', filter: 'blur(50px)', animationDelay: '-3s' }} aria-hidden="true" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20 animate-orb pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(var(--color-accent), 0.15) 0%, transparent 70%)', filter: 'blur(80px)', animationDelay: '-5s' }} aria-hidden="true" />
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full opacity-20 animate-orb pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(var(--color-primary), 0.15) 0%, transparent 70%)', filter: 'blur(60px)' }} aria-hidden="true" />
+      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] rounded-full opacity-20 animate-orb pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(var(--color-secondary), 0.15) 0%, transparent 70%)', filter: 'blur(50px)', animationDelay: '-3s' }} aria-hidden="true" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10 animate-orb pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(var(--color-accent), 0.1) 0%, transparent 70%)', filter: 'blur(80px)', animationDelay: '-5s' }} aria-hidden="true" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -91,30 +23,35 @@ export default function HeroSection() {
           className="flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-16 justify-center"
         >
           <div className="flex-1 text-center md:text-left">
-            <span className="inline-flex items-center gap-1.5 text-sm mb-6 tracking-wide text-pop-accent">
-              <MapPin size={14} /> Greater Toronto Area, Canada
-            </span>
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-sans font-bold text-light leading-[1.05] mb-6 tracking-tight text-glow-primary">
+            <motion.span
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm mb-4 tracking-[2px] uppercase text-pop-accent"
+            >
+              <MapPin size={12} /> Greater Toronto Area, Canada
+            </motion.span>
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-sans font-bold text-light leading-[1.05] mb-6 tracking-tight">
               Aarush <br className="sm:hidden" />
               <span className="gradient-text-shimmer">Karak</span>
             </h1>
-            <div className="frosted p-6 md:p-8 lg:p-10 space-y-4">
-              <p className="text-base sm:text-lg md:text-xl text-pop-primary max-w-2xl leading-relaxed font-normal">
-                Sophomore @ John Fraser Secondary School &middot; Founder @ The Coder Bros
+            <div className="frosted p-6 sm:p-8 lg:p-10 space-y-5">
+              <p className="text-base sm:text-lg md:text-xl text-light/90 max-w-2xl leading-relaxed font-medium">
+                Sophomore &middot; Founder &middot; Developer
               </p>
-              <p className="text-sm md:text-base text-pop-accent max-w-2xl leading-relaxed font-normal">
-                Software Developer &middot; Maker Studio Intern @ Sci-Tech &middot; TSA Parliamentarian &middot; App Developer @ Hack Club
+              <p className="text-sm sm:text-base text-pop-secondary max-w-2xl leading-relaxed">
+                Full-stack &amp; spatial computing engineer &mdash; building across AI, 3D, and the modern web.
               </p>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2">
-                <Link to="/projects" className="px-8 py-3.5 rounded-full text-white font-semibold text-sm hover:opacity-80 transition-all shadow-lg" style={{ backgroundColor: 'rgb(var(--color-primary))', boxShadow: '0 0 20px rgba(var(--color-primary), 0.3)' }}>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1">
+                <Link to="/projects" className="px-7 py-3 rounded-full text-white font-semibold text-sm hover:opacity-80 transition-all shadow-lg" style={{ backgroundColor: 'rgb(var(--color-primary))', boxShadow: '0 0 24px rgba(var(--color-primary), 0.25)' }}>
                   View my work
                 </Link>
-                <Link to="/contact" className="px-8 py-3.5 rounded-full text-light font-semibold text-sm hover:bg-white/10 transition-all border border-white/10">
+                <Link to="/contact" className="px-7 py-3 rounded-full text-sm font-semibold text-light hover:bg-white/10 transition-all border border-white/10">
                   Get in touch
                 </Link>
               </div>
             </div>
-            <div className="flex items-center gap-3 mt-6" role="list" aria-label="Social links">
+            <div className="flex items-center justify-center md:justify-start gap-3 mt-6" role="list" aria-label="Social links">
               <a href="https://github.com/3ni8ma" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all duration-300 hover:scale-110" aria-label="GitHub profile">
                 <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" aria-hidden="true" fill="rgb(var(--color-primary))">
                   <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>

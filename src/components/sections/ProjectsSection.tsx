@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import { ExternalLink } from 'lucide-react'
 import ScrollReveal from '../ui/ScrollReveal'
+import { use3DTilt } from '../../hooks/use3DTilt'
 
 const projects = [
   { title: 'HELIOS', desc: 'Browser-based AI operating system with hand-gesture navigation and a 3D spatial interface.', tags: ['Three.js', 'MediaPipe', 'React'], color: 'var(--color-primary)', link: 'https://github.com/3ni8ma/HELIOS' },
@@ -13,6 +14,43 @@ function getTagColor(color: string) {
   if (color === 'var(--color-secondary)') return { bg: 'rgba(168,124,255,0.08)', text: 'rgb(168,124,255)' }
   if (color === 'var(--color-accent)') return { bg: 'rgba(34,211,238,0.08)', text: 'rgb(34,211,238)' }
   return { bg: 'rgba(194,164,255,0.08)', text: 'rgb(194,164,255)' }
+}
+
+function ProjectCard({ p }: { p: typeof projects[number] }) {
+  const tilt = use3DTilt(6)
+  const tc = getTagColor(p.color)
+
+  return (
+    <article
+      ref={tilt.ref}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      className="card-minimal shrink-0 w-[350px] sm:w-[400px] lg:w-[480px] group cursor-pointer transition-shadow duration-300"
+      style={{ transition: 'box-shadow 0.3s ease, border-color 0.3s ease', transformStyle: 'preserve-3d' }}
+      onClick={() => window.open(p.link, '_blank', 'noopener,noreferrer')}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(p.link, '_blank', 'noopener,noreferrer') }}}
+      role="link"
+      tabIndex={0}
+      aria-label={`${p.title} — ${p.desc}`}
+    >
+      <div className="flex items-start justify-between mb-4" style={{ transform: 'translateZ(20px)' }}>
+        <h3 className="text-xl font-sans font-medium text-light">{p.title}</h3>
+        <ExternalLink size={16} className="text-muted group-hover:text-primary transition-colors mt-1" />
+      </div>
+      <p className="text-sm text-muted-light leading-relaxed mb-5" style={{ transform: 'translateZ(15px)' }}>{p.desc}</p>
+      <div className="flex flex-wrap gap-2" style={{ transform: 'translateZ(10px)' }}>
+        {p.tags.map(t => (
+          <span
+            key={t}
+            className="text-xs px-3 py-1 rounded-full"
+            style={{ backgroundColor: tc.bg, color: tc.text }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+    </article>
+  )
 }
 
 export default function ProjectsSection() {
@@ -55,39 +93,11 @@ export default function ProjectsSection() {
           <div
             ref={trackRef}
             className="flex gap-6 will-change-transform"
-            style={{ transition: 'transform 0.05s linear' }}
+            style={{ perspective: '1200px', transition: 'transform 0.05s linear' }}
           >
-            {projects.map((p) => {
-              const tc = getTagColor(p.color)
-              return (
-                <article
-                  key={p.title}
-                  className="card-minimal shrink-0 w-[350px] sm:w-[400px] lg:w-[480px] group cursor-pointer"
-                  onClick={() => window.open(p.link, '_blank', 'noopener,noreferrer')}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(p.link, '_blank', 'noopener,noreferrer') }}}
-                  role="link"
-                  tabIndex={0}
-                  aria-label={`${p.title} — ${p.desc}`}
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-xl font-sans font-medium text-light">{p.title}</h3>
-                    <ExternalLink size={16} className="text-muted group-hover:text-primary transition-colors mt-1" />
-                  </div>
-                  <p className="text-sm text-muted-light leading-relaxed mb-5">{p.desc}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {p.tags.map(t => (
-                      <span
-                        key={t}
-                        className="text-xs px-3 py-1 rounded-full"
-                        style={{ backgroundColor: tc.bg, color: tc.text }}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </article>
-              )
-            })}
+            {projects.map(p => (
+              <ProjectCard key={p.title} p={p} />
+            ))}
           </div>
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-1 items-center">
             <div className="w-24 h-[1px] bg-white/10 relative overflow-hidden rounded-full">

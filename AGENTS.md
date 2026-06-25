@@ -23,6 +23,24 @@ I will:
 > Run daily contribution pipeline
 ```
 
+## Dev server
+
+Managed via `screen` session named `vite-dev`:
+
+```bash
+# Start (if not running)
+screen -dmS vite-dev bash -c "cd /path/to/project && npx vite --port 5173 --host 2>&1 | tee /tmp/vite-dev.log"
+
+# View logs
+cat /tmp/vite-dev.log
+
+# Reattach to console
+screen -r vite-dev
+
+# Stop
+screen -S vite-dev -X quit
+```
+
 ## Automated workflows (run on schedule)
 
 | Workflow | Schedule | What it does |

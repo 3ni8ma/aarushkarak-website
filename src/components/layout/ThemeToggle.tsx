@@ -34,7 +34,7 @@ export default function ThemeToggle() {
         <Palette size={14} />
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-2 glass border border-white/10 rounded-2xl p-2 min-w-[160px] shadow-xl" role="listbox" aria-label="Select theme">
+        <div className="absolute right-0 top-full mt-2 bg-dark/95 backdrop-blur-xl border border-white/10 rounded-2xl p-2 min-w-[160px] shadow-xl z-[100]" role="listbox" aria-label="Select theme">
           {themes.map(t => {
             const Icon = themeIcons[t.id]
             const [r, g, b] = t.colors.primary.split(' ').map(Number)
