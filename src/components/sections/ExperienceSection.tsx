@@ -14,7 +14,7 @@ const companyLogos: Record<string, string> = {
   Chingu: '/images/logos/chingu.png',
   'Hack Club': '/images/logos/hackclub.svg',
   Fiverr: '/images/logos/fiverr.svg',
-  'The Coder Bros': '/images/logos/the-coder-bros.svg',
+  'The Coder Bros': '/images/logos/the-coder-bros.png',
   'Sci-Tech': '/images/logos/scitech.png',
 }
 
