@@ -9,9 +9,9 @@ export default {
       colors: {
         dark: '#0A0A0A',
         'dark-card': '#151515',
-        primary: '#D946EF',
-        secondary: '#6366F1',
-        accent: '#22D3EE',
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+        secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
+        accent: 'rgb(var(--color-accent) / <alpha-value>)',
         light: '#FFFFFF',
         muted: '#A1A1AA',
       },
@@ -40,8 +40,8 @@ export default {
           '50%': { transform: 'translateY(-20px)' },
         },
         pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(217,70,239,0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(217,70,239,0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(var(--color-primary), 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(var(--color-primary), 0.6)' },
         },
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(20px)' },

@@ -4,6 +4,8 @@ import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import PageTransition from './components/layout/PageTransition'
+import SkipLink from './components/layout/SkipLink'
+import ScrollTopButton from './components/layout/ScrollTopButton'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
@@ -15,8 +17,9 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
 function Fallback() {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="flex items-center justify-center min-h-[60vh]" role="status" aria-label="Loading page">
       <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <span className="sr-only">Loading...</span>
     </div>
   )
 }
@@ -26,24 +29,27 @@ function App() {
 
   return (
     <div className="min-h-screen bg-dark">
+      <SkipLink />
       <Navbar />
-      <Suspense fallback={<Fallback />}>
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
-            <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
-            <Route path="/experience" element={<PageTransition><ExperiencePage /></PageTransition>} />
-            <Route path="/projects" element={<PageTransition><ProjectsPage /></PageTransition>} />
-            <Route path="/skills" element={<PageTransition><SkillsPage /></PageTransition>} />
-            <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
-            <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
-          </Routes>
-        </AnimatePresence>
-      </Suspense>
+      <main id="main-content">
+        <Suspense fallback={<Fallback />}>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
+              <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
+              <Route path="/experience" element={<PageTransition><ExperiencePage /></PageTransition>} />
+              <Route path="/projects" element={<PageTransition><ProjectsPage /></PageTransition>} />
+              <Route path="/skills" element={<PageTransition><SkillsPage /></PageTransition>} />
+              <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+              <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
+            </Routes>
+          </AnimatePresence>
+        </Suspense>
+      </main>
       <Footer />
+      <ScrollTopButton />
     </div>
   )
 }
 
 export default App
-

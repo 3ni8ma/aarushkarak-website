@@ -1,22 +1,14 @@
-import { Link } from 'react-router-dom'
-import { SEOHead } from '../components/seo/SEOHead'
+import { SEOHead } from '../components/seo/SEOHead';
+import { Link } from 'react-router-dom';
 
 export default function NotFoundPage() {
   return (
-    <div className="relative">
-      <SEOHead title="404 — Page Not Found" path="/404" />
-      <div className="fixed inset-0 z-0 overflow-hidden">
-        <img src="/images/bg/home.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" />
-        <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/20 to-dark/90" />
-        <div className="absolute inset-0 bg-grain" />
-      </div>
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-4">
-        <h1 className="text-8xl font-bold gradient-text-shimmer mb-4">404</h1>
-        <p className="text-xl text-gray-300 mb-8">Page not found</p>
-        <Link
-          to="/"
-          className="px-6 py-3 rounded-lg bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-colors"
-        >
+    <div className="page-container flex items-center justify-center">
+      <SEOHead title="Not Found" description="Page not found." path="*" />
+      <div className="text-center">
+        <h1 className="text-8xl font-heading font-bold gradient-text-shimmer mb-4">404</h1>
+        <p className="text-lg text-pop-secondary mb-8">This page doesn't exist.</p>
+        <Link to="/" className="px-8 py-3.5 rounded-full bg-primary text-white font-semibold text-sm hover:bg-primary/80 transition-all shadow-lg shadow-primary/30">
           Go home
         </Link>
       </div>
