@@ -2,7 +2,7 @@ name: Daily Issue Discovery
 
 on:
   schedule:
-    - cron: "0 8 * * 1-5"
+    - cron: "*/30 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PAT_TOKEN }}
           script: |
             const queries = [
               'label:"good first issue" language:typescript state:open',
