@@ -1,0 +1,21 @@
+name: Heartbeat
+
+on:
+  schedule:
+    - cron: "0 12 * * 0"
+  workflow_dispatch:
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Touch heartbeat file
+        run: |
+          echo "heartbeat-$(date -u +%Y%m%d)" > .heartbeat
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: heartbeat [skip ci]"
+          commit_user_name: "Aarush Karak"
+          commit_user_email: "worldshaans@gmail.com"
+          file_pattern: .heartbeat
