@@ -1,8 +1,9 @@
-import { useRef, useEffect, useMemo } from 'react'
+import { useRef, useEffect, useMemo, type ReactNode } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 import * as THREE from 'three'
 import { useThemeColors } from '../../hooks/useThemeColors'
+import { useTheme } from '../../contexts/ThemeContext'
 import SceneManager from '../three/SceneManager'
 import FloatingGeometry from '../three/FloatingGeometry'
 
@@ -12,7 +13,7 @@ const isMobile = typeof window !== 'undefined' && (
   window.innerWidth < 768
 )
 
-function MouseTracker() {
+function MouseTracker({ active = false }: { active?: boolean }) {
   const targetRef = useRef({ x: 0, y: 0 })
   const currentRef = useRef({ x: 0, y: 0 })
   const groupRef = useRef<THREE.Group>(null)
@@ -27,6 +28,7 @@ function MouseTracker() {
   }, [])
 
   useFrame(() => {
+    if (!active) return
     currentRef.current.x += (targetRef.current.x - currentRef.current.x) * 0.03
     currentRef.current.y += (targetRef.current.y - currentRef.current.y) * 0.03
     if (groupRef.current) {
@@ -38,9 +40,16 @@ function MouseTracker() {
   return <group ref={groupRef} />
 }
 
-function HeroParticles() {
+function HeroParticles({ revealed = false }: { revealed?: boolean }) {
   const colors = useThemeColors()
   const count = isMobile ? 80 : 200
+  const materialRef = useRef<THREE.PointsMaterial>(null)
+
+  useFrame(() => {
+    if (!materialRef.current) return
+    const target = revealed ? 0.6 : 0
+    materialRef.current.opacity += (target - materialRef.current.opacity) * 0.04
+  })
 
   const [positions, sizes, colorArray] = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -73,21 +82,42 @@ function HeroParticles() {
     return geo
   }, [positions, sizes, colorArray])
 
-  const material = useMemo(() => new THREE.PointsMaterial({
-    size: 0.08,
-    transparent: true,
-    opacity: 0.6,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    vertexColors: true,
-    sizeAttenuation: true,
-  }), [])
+  const material = useMemo(() => {
+    const m = new THREE.PointsMaterial({
+      size: 0.08,
+      transparent: true,
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      vertexColors: true,
+      sizeAttenuation: true,
+    })
+    return m
+  }, [])
 
   return <points geometry={geometry} material={material} />
 }
 
+function RevealScale({ children }: { children: ReactNode }) {
+  const groupRef = useRef<THREE.Group>(null)
+  const scaleRef = useRef(0)
+
+  const { revealStarted } = useTheme()
+
+  useFrame(() => {
+    const target = revealStarted ? 1 : 0
+    scaleRef.current += (target - scaleRef.current) * 0.04
+    if (groupRef.current) {
+      groupRef.current.scale.setScalar(scaleRef.current)
+    }
+  })
+
+  return <group ref={groupRef}>{children}</group>
+}
+
 export default function HeroScene() {
   const colors = useThemeColors()
+  const { revealStarted } = useTheme()
 
   const geometries = useMemo(() => {
     if (isMobile) return [
@@ -105,13 +135,15 @@ export default function HeroScene() {
 
   return (
     <SceneManager cameraZ={10}>
-      <MouseTracker />
-      <HeroParticles />
-      {geometries.map((g, i) => (
-        <Float key={i} speed={0.4 + i * 0.1} rotationIntensity={0.2 + i * 0.05} floatIntensity={0.3 + i * 0.05}>
-          <FloatingGeometry shape={g.shape} position={g.pos} color={g.color} size={g.size} speed={1} opacity={g.opacity} />
-        </Float>
-      ))}
+      <MouseTracker active={revealStarted} />
+      <HeroParticles revealed={revealStarted} />
+      <RevealScale>
+        {geometries.map((g, i) => (
+          <Float key={i} speed={0.4 + i * 0.1} rotationIntensity={0.2 + i * 0.05} floatIntensity={0.3 + i * 0.05}>
+            <FloatingGeometry shape={g.shape} position={g.pos} color={g.color} size={g.size} speed={1} opacity={g.opacity} />
+          </Float>
+        ))}
+      </RevealScale>
     </SceneManager>
   )
 }

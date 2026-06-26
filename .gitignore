@@ -25,3 +25,4 @@ typos.txt
 *.sw?
 .env
 .vercel
+.env*

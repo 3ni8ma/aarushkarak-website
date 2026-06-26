@@ -5,6 +5,8 @@ interface ThemeContextType {
   theme: Theme
   setTheme: (id: string) => void
   themes: Theme[]
+  revealStarted: boolean
+  setRevealStarted: (v: boolean) => void
 }
 
 const ThemeContext = createContext<ThemeContextType | null>(null)
@@ -23,6 +25,7 @@ function getInitialTheme(): Theme {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme)
+  const [revealStarted, setRevealStarted] = useState(false)
 
   const setTheme = (id: string) => {
     const t = themes.find(th => th.id === id)
@@ -42,9 +45,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [theme])
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, themes }}>
-      {children}
-    </ThemeContext.Provider>
+      <ThemeContext.Provider value={{ theme, setTheme, themes, revealStarted, setRevealStarted }}>
+        {children}
+      </ThemeContext.Provider>
   )
 }
 

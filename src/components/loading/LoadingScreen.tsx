@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTheme } from '../../contexts/ThemeContext'
 
 const tags = [
   'Software Developer',
@@ -35,9 +36,16 @@ export default function LoadingScreen() {
   const [typewriterText, setTypewriterText] = useState('')
   const [typewriterPhase, setTypewriterPhase] = useState<'typing' | 'waiting' | 'deleting'>('typing')
   const [tagIndex, setTagIndex] = useState(0)
+  const { setRevealStarted } = useTheme()
+  const [burst, setBurst] = useState(false)
+  const burstRef = useRef(false)
   const btnRef = useRef<HTMLButtonElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const progressRef = useRef(0)
+
+  useEffect(() => {
+    burstRef.current = burst
+  }, [burst])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -96,10 +104,11 @@ export default function LoadingScreen() {
     if (!ctx) return
 
     let animId: number
-    let particles = stars.map(s => ({
+    const particles = stars.map(s => ({
       ...s,
       vx: (Math.random() - 0.5) * 0.15,
       vy: (Math.random() - 0.5) * 0.15,
+      life: 1,
     }))
 
     function resize() {
@@ -110,17 +119,39 @@ export default function LoadingScreen() {
     resize()
     window.addEventListener('resize', resize)
 
+    function getPrimaryColor() {
+      const val = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()
+      return val || '194 164 255'
+    }
+
     function draw() {
       if (!ctx || !canvas) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      particles.forEach(p => {
-        p.x += p.vx
-        p.y += p.vy
-        if (p.x < 0 || p.x > 100) p.vx *= -1
-        if (p.y < 0 || p.y > 100) p.vy *= -1
+      const rgb = getPrimaryColor()
 
-        const alpha = p.opacity * (0.6 + 0.4 * Math.sin(Date.now() / 1000 * p.duration + p.delay))
+      particles.forEach(p => {
+        if (burstRef.current) {
+          const dx = p.x - 50
+          const dy = p.y - 50
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1
+          p.vx += (dx / dist) * 0.4
+          p.vy += (dy / dist) * 0.4
+          p.life -= 0.015
+          p.size *= 0.997
+        } else {
+          p.x += p.vx
+          p.y += p.vy
+          if (p.x < 0 || p.x > 100) p.vx *= -1
+          if (p.y < 0 || p.y > 100) p.vy *= -1
+        }
+
+        if (p.size < 0.05 || p.life <= 0) return
+
+        const alpha = burstRef.current
+          ? Math.max(0, p.life) * 0.4
+          : p.opacity * (0.6 + 0.4 * Math.sin(Date.now() / 1000 * p.duration + p.delay))
+
         ctx.beginPath()
         ctx.arc(
           (p.x / 100) * canvas.width,
@@ -129,7 +160,7 @@ export default function LoadingScreen() {
           0,
           Math.PI * 2,
         )
-        ctx.fillStyle = `rgba(194, 164, 255, ${alpha})`
+        ctx.fillStyle = `rgba(${rgb}, ${alpha})`
         ctx.fill()
       })
 
@@ -146,11 +177,15 @@ export default function LoadingScreen() {
   const handleClick = useCallback(() => {
     if (progress < 100) return
     setClicked(true)
+    setBurst(true)
+    setRevealStarted(true)
     setTimeout(() => {
       setComplete(true)
-      setTimeout(() => setLoading(false), 700)
-    }, 900)
-  }, [progress])
+    }, 500)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1100)
+  }, [progress, setRevealStarted])
 
   return (
     <AnimatePresence>
@@ -170,13 +205,13 @@ export default function LoadingScreen() {
           <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
             <div className="absolute top-1/4 left-1/4 w-72 h-72 rounded-full opacity-20"
               style={{
-                background: 'radial-gradient(circle, rgba(194,164,255,0.15), transparent 70%)',
+                background: 'radial-gradient(circle, rgba(var(--color-primary), 0.15), transparent 70%)',
                 animation: 'loadingOrbA 8s ease-in-out infinite',
               }}
             />
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-15"
               style={{
-                background: 'radial-gradient(circle, rgba(168,124,255,0.12), transparent 70%)',
+                background: 'radial-gradient(circle, rgba(var(--color-secondary), 0.12), transparent 70%)',
                 animation: 'loadingOrbB 10s ease-in-out infinite',
               }}
             />
@@ -207,7 +242,7 @@ export default function LoadingScreen() {
                     initial={{ scale: 0, opacity: 0 }}
                     animate={complete ? { scale: 1, opacity: 1 } : {}}
                   >
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgb(194,164,255)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style={{ stroke: 'rgb(var(--color-primary))' }} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </motion.div>

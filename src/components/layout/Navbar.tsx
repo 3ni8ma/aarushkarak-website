@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 import { FileText } from 'lucide-react'
+import { useTheme } from '../../contexts/ThemeContext'
 import ThemeToggle from './ThemeToggle'
 
 const links = [
@@ -15,6 +17,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { pathname } = useLocation()
+  const { revealStarted } = useTheme()
   const indicatorRef = useRef<HTMLSpanElement>(null)
   const navRef = useRef<HTMLDivElement>(null)
 
@@ -37,11 +40,15 @@ export default function Navbar() {
   }, [pathname])
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-      scrolled
-        ? 'bg-dark/80 backdrop-blur-xl border-b border-white/[0.03]'
-        : 'bg-transparent'
-    }`} role="navigation" aria-label="Main navigation">
+    <motion.nav
+      initial={{ opacity: 0 }}
+      animate={{ opacity: revealStarted ? 1 : 0 }}
+      transition={{ delay: 1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? 'bg-dark/80 backdrop-blur-xl border-b border-white/[0.03]'
+          : 'bg-transparent'
+      }`} role="navigation" aria-label="Main navigation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="group flex items-center gap-1 text-xl font-sans font-bold tracking-wide" aria-label="Home page">
@@ -133,6 +140,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-    </nav>
+    </motion.nav>
   )
 }
