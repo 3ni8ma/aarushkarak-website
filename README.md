@@ -95,3 +95,5 @@ public/           # Static files (images, favicon, resume.pdf)
 ## License
 
 MIT
+
+<!-- ach: 2026-06-26 15:59:52 -->
