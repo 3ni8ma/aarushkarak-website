@@ -1,4 +1,4 @@
-// 2026-06-27 19:00:03
+// 2026-06-27 20:30:04
 import { Helmet } from 'react-helmet-async';
 
 interface SEOHeadProps {
