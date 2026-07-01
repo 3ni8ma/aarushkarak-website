@@ -129,6 +129,36 @@ export default function GestureControls() {
 
     let cancelled = false
 
+    async function tryInit(delegate: 'GPU' | 'CPU' = 'GPU'): Promise<boolean> {
+      try {
+        const { HandLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision')
+        if (cancelled) return false
+
+        const vision = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm/'
+        )
+        if (cancelled) return false
+
+        const landmarker = await HandLandmarker.createFromOptions(vision, {
+          baseOptions: {
+            modelAssetPath:
+              'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+            delegate,
+          },
+          runningMode: 'VIDEO',
+          numHands: 1,
+        })
+        if (cancelled) { landmarker.close(); return false }
+
+        landmarkerRef.current = landmarker
+        setReady(true)
+        intervalId.current = window.setInterval(processFrame, 200)
+        return true
+      } catch {
+        return false
+      }
+    }
+
     async function setup() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -138,33 +168,22 @@ export default function GestureControls() {
         streamRef.current = stream
         if (videoRef.current) videoRef.current.srcObject = stream
 
-        const { HandLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision')
-        if (cancelled) return
-
-        const vision = await FilesetResolver.forVisionTasks(
-          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm/'
-        )
-        if (cancelled) return
-
-        const landmarker = await HandLandmarker.createFromOptions(vision, {
-          baseOptions: {
-            modelAssetPath:
-              'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
-            delegate: 'GPU',
-          },
-          runningMode: 'VIDEO',
-          numHands: 1,
-        })
-        if (cancelled) { landmarker.close(); return }
-
-        landmarkerRef.current = landmarker
-        setReady(true)
-        intervalId.current = window.setInterval(processFrame, 200)
+        if (!(await tryInit('GPU'))) {
+          if (cancelled) return
+          if (!(await tryInit('CPU'))) {
+            setError('Gesture model failed to load (GPU+CPU). Check console.')
+          }
+        }
       } catch (err) {
         console.error('Gesture setup failed:', err)
-        setError(err instanceof DOMException && err.name === 'NotAllowedError'
-          ? 'Webcam access denied'
-          : 'Failed to initialize gesture controls')
+        const msg = err instanceof DOMException
+          ? err.name === 'NotAllowedError'
+            ? 'Webcam access denied'
+            : err.name === 'NotFoundError'
+              ? 'No camera found'
+              : err.message
+          : err instanceof Error ? err.message : 'Unknown error'
+        setError(msg)
       }
     }
 
@@ -251,9 +270,18 @@ export default function GestureControls() {
               Debug
             </button>
             {error && (
-              <div className="text-[10px] px-2 py-1 rounded-full" style={{ color: '#EF4444' }}>
-                {error}
-              </div>
+              <button
+                onClick={() => { setError(null); setEnabled(false); setTimeout(() => setEnabled(true), 100); }}
+                className="text-[10px] px-2 py-1 rounded-full backdrop-blur-xl transition-all cursor-pointer hover:scale-105"
+                style={{
+                  background: 'var(--glass-bg)',
+                  border: '1px solid rgba(239,68,68,0.3)',
+                  color: '#EF4444',
+                }}
+                title="Tap to retry"
+              >
+                {error} — tap to retry
+              </button>
             )}
           </>
         )}
