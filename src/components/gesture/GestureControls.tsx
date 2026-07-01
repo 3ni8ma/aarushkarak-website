@@ -11,7 +11,7 @@ const pages = ['/', '/about', '/experience', '/skills', '/blog', '/contact']
 
 const GESTURE_INFO = [
   { icon: '⊹', label: 'Pinch', desc: 'Scroll down' },
-  { icon: '☝', label: 'Point', desc: 'Scroll up' },
+  { icon: '☝', label: 'Point up', desc: 'Scroll up' },
   { icon: '✊', label: 'Fist', desc: 'Next tab' },
 ] as const
 
@@ -36,9 +36,10 @@ function classifyGesture(landmarks: NormalizedLandmark[]): Gesture {
   const ringExt = distance(ringTip, ringPip) > 0.07
   const pinkyExt = distance(pinkyTip, pinkyPip) > 0.07
   const allCurled = !indexExt && !middleExt && !ringExt && !pinkyExt
+  const indexUp = (landmarks[5].y - landmarks[8].y) > Math.abs(landmarks[8].x - landmarks[5].x) * 1.5
 
   if (allCurled) return 'fist'
-  if (indexExt && !middleExt && !ringExt && !pinkyExt && thumbIndexDist > 0.05) return 'point'
+  if (indexExt && !middleExt && !ringExt && !pinkyExt && thumbIndexDist > 0.05 && indexUp) return 'point'
   if (thumbIndexDist < 0.035) return 'pinch'
 
   return 'none'
