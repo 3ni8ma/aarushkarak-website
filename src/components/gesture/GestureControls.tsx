@@ -5,7 +5,7 @@ import type { NormalizedLandmark, HandLandmarker } from '@mediapipe/tasks-vision
 type Gesture = 'none' | 'pinch' | 'point' | 'fist'
 
 const SCROLL_AMOUNT = 500
-const SKIP_FRAMES = 30
+const SKIP_FRAMES = 15
 const COOLDOWN = 800
 const pages = ['/', '/about', '/experience', '/skills', '/blog', '/contact']
 
@@ -143,7 +143,11 @@ export default function GestureControls() {
         })
         if (cancelled) { stream.getTracks().forEach(t => t.stop()); return }
         streamRef.current = stream
-        if (videoRef.current) videoRef.current.srcObject = stream
+        const v = videoRef.current
+        if (v) {
+          v.srcObject = stream
+          v.play().catch(() => {})
+        }
 
         const { HandLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision')
         if (cancelled) return
@@ -310,7 +314,7 @@ export default function GestureControls() {
         )}
       </div>
 
-      <video ref={videoRef} autoPlay playsInline muted className="hidden" />
+      <video ref={videoRef} autoPlay playsInline muted className="fixed" style={{ top: -9999, left: -9999, width: 1, height: 1, opacity: 0.01, pointerEvents: 'none' }} />
       <canvas
         ref={canvasRef}
         width={320}
