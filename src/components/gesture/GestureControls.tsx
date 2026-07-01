@@ -6,7 +6,7 @@ type Gesture = 'none' | 'pinch' | 'point' | 'fist'
 
 const SCROLL_AMOUNT = 500
 const SKIP_FRAMES = 30
-const COOLDOWN = 1000
+const COOLDOWN = 800
 const pages = ['/', '/about', '/experience', '/skills', '/blog', '/contact']
 
 const GESTURE_INFO = [
@@ -48,6 +48,7 @@ export default function GestureControls() {
   const [enabled, setEnabled] = useState(false)
   const [ready, setReady] = useState(false)
   const [currentGesture, setCurrentGesture] = useState<Gesture>('none')
+  const [handFound, setHandFound] = useState(false)
   const [showGuide, setShowGuide] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -65,7 +66,6 @@ export default function GestureControls() {
   const pathRef = useRef(location.pathname)
 
   useEffect(() => { pathRef.current = location.pathname }, [location.pathname])
-
   debugRef.current = showDebug
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function GestureControls() {
       lastGesture.current = gesture
       lastGestureTime.current = now
       setCurrentGesture(gesture)
-      setTimeout(() => setCurrentGesture('none'), 300)
+      setTimeout(() => setCurrentGesture('none'), 600)
 
       switch (gesture) {
         case 'pinch':
@@ -113,10 +113,12 @@ export default function GestureControls() {
       }
 
       if (!result.landmarks || result.landmarks.length === 0) {
+        setHandFound(false)
         if (debugRef.current && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height)
         return
       }
 
+      setHandFound(true)
       const lm = result.landmarks[0]
       const gesture = classifyGesture(lm)
       if (gesture !== 'none') fireGesture(gesture)
@@ -137,7 +139,7 @@ export default function GestureControls() {
     async function setup() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 160, height: 120, facingMode: 'user' },
+          video: { width: 320, height: 240, facingMode: 'user' },
         })
         if (cancelled) { stream.getTracks().forEach(t => t.stop()); return }
         streamRef.current = stream
@@ -194,6 +196,15 @@ export default function GestureControls() {
     setEnabled(e => !e)
   }, [enabled])
 
+  const statusColor = !ready ? 'bg-yellow-500'
+    : handFound ? 'bg-green-500'
+    : 'bg-gray-400'
+
+  const statusLabel = currentGesture !== 'none' ? currentGesture
+    : !ready ? 'Loading...'
+    : !handFound ? 'No hand'
+    : 'Active'
+
   return (
     <>
       <div className="fixed bottom-20 right-8 z-50 flex flex-col items-end gap-2">
@@ -230,12 +241,8 @@ export default function GestureControls() {
                 color: currentGesture !== 'none' ? 'rgb(var(--color-primary))' : 'var(--text-muted)',
               }}
             >
-              <span className={`inline-block w-2 h-2 rounded-full ${ready ? 'bg-green-500' : 'bg-yellow-500 animate-pulse'}`} />
-              {currentGesture !== 'none' ? (
-                <span>{currentGesture}</span>
-              ) : ready ? (
-                'Active'
-              ) : 'Loading...'}
+              <span className={`inline-block w-2 h-2 rounded-full ${statusColor} animate-pulse`} />
+              {statusLabel}
             </button>
             <button
               onClick={() => setShowGuide(g => !g)}
@@ -258,7 +265,7 @@ export default function GestureControls() {
                 opacity: 0.4,
               }}
             >
-              Debug
+              {showDebug ? 'Hide debug' : 'Debug'}
             </button>
             {error && (
               <button
@@ -306,8 +313,8 @@ export default function GestureControls() {
       <video ref={videoRef} autoPlay playsInline muted className="hidden" />
       <canvas
         ref={canvasRef}
-        width={160}
-        height={120}
+        width={320}
+        height={240}
         className="fixed bottom-4 right-4 z-50 rounded-xl shadow-lg pointer-events-none"
         style={{ width: 80, height: 60, display: showDebug ? 'block' : 'none' }}
       />
