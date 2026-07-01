@@ -8,6 +8,9 @@ export default function Footer() {
           &copy; {new Date().getFullYear()} Aarush Karak.
         </p>
         <div className="flex items-center gap-4">
+          <a href="https://www.buymeacoffee.com/aarushkarak" target="_blank" rel="noopener noreferrer" className="text-xs text-muted hover:text-[#FFDD00] transition-colors" aria-label="Buy me a coffee (opens in new tab)">
+            ☕ Buy me a coffee
+          </a>
           <a href="mailto:worldshaans@gmail.com" className="text-muted hover:text-light transition-colors" aria-label="Email worldshaans@gmail.com">
             <Mail size={15} />
           </a>
