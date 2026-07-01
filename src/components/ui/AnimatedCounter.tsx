@@ -1,4 +1,4 @@
-// 2026-06-30 21:30:05
+// 2026-06-30 22:00:05
 import { useState, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -7,11 +7,9 @@ interface AnimatedCounterProps {
   suffix?: string;
   duration?: number;
   label?: string;
-  sub?: string;
-  accent?: string;
 }
 
-export function AnimatedCounter({ end, suffix = '', duration = 2000, label, sub, accent: _accent }: AnimatedCounterProps) {
+export function AnimatedCounter({ end, suffix = '', duration = 2000, label }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
   const startedRef = useRef(false);
@@ -42,10 +40,9 @@ export function AnimatedCounter({ end, suffix = '', duration = 2000, label, sub,
   }, [inView, end, duration]);
 
   return (
-    <div ref={ref} className="text-center p-4 rounded-2xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)' }}>
-      <span className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>{count}{suffix}</span>
-      {label && <div className="text-xs font-medium mt-2" style={{ color: 'var(--text-primary)' }}>{label}</div>}
-      {sub && <div className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>{sub}</div>}
+    <div ref={ref} className="text-center">
+      <span className="text-3xl font-bold text-white">{count}{suffix}</span>
+      {label && <p className="text-sm text-gray-400 mt-1">{label}</p>}
     </div>
   );
 }
