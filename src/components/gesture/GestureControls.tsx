@@ -75,6 +75,7 @@ export default function GestureControls() {
     }
 
     let cancelled = false
+    let glTryCount = 0
 
     function fireGesture(gesture: Gesture) {
       const now = Date.now()
@@ -139,7 +140,7 @@ export default function GestureControls() {
     async function setup() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 320, height: 240, facingMode: 'user' },
+          video: { width: 224, height: 168, facingMode: 'user' },
         })
         if (cancelled) { stream.getTracks().forEach(t => t.stop()); return }
         streamRef.current = stream
@@ -161,7 +162,7 @@ export default function GestureControls() {
           baseOptions: {
             modelAssetPath:
               'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
-            delegate: 'CPU',
+            delegate: 'GPU',
           },
           runningMode: 'VIDEO',
           numHands: 1,
@@ -173,6 +174,11 @@ export default function GestureControls() {
         frameId.current = requestAnimationFrame(loop)
       } catch (err) {
         console.error('Gesture setup failed:', err)
+        if (glTryCount === 0 && err instanceof Error && err.message?.includes('GPU')) {
+          glTryCount++
+          setTimeout(setup, 500)
+          return
+        }
         const msg = err instanceof DOMException
           ? err.name === 'NotAllowedError'
             ? 'Webcam access denied'
@@ -259,18 +265,6 @@ export default function GestureControls() {
             >
               {showGuide ? 'Hide guide' : 'Guide'}
             </button>
-            <button
-              onClick={() => setShowDebug(d => !d)}
-              className="text-[10px] px-2 py-1 rounded-full backdrop-blur-xl transition-all"
-              style={{
-                background: 'var(--glass-bg)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-muted)',
-                opacity: 0.4,
-              }}
-            >
-              {showDebug ? 'Hide debug' : 'Debug'}
-            </button>
             {error && (
               <button
                 onClick={() => { setError(null); setEnabled(false); setTimeout(() => setEnabled(true), 100); }}
@@ -317,8 +311,8 @@ export default function GestureControls() {
       <video ref={videoRef} autoPlay playsInline muted className="fixed" style={{ top: -9999, left: -9999, width: 1, height: 1, opacity: 0.01, pointerEvents: 'none' }} />
       <canvas
         ref={canvasRef}
-        width={320}
-        height={240}
+        width={224}
+        height={168}
         className="fixed bottom-4 right-4 z-50 rounded-xl shadow-lg pointer-events-none"
         style={{ width: 80, height: 60, display: showDebug ? 'block' : 'none' }}
       />
