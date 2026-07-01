@@ -13,7 +13,7 @@ jobs:
       - name: Touch heartbeat file
         run: |
           echo "heartbeat-$(date -u +%Y%m%d)" > .heartbeat
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: heartbeat [skip ci]"
           commit_user_name: "Aarush Karak"
