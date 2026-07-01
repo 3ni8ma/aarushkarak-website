@@ -21,7 +21,7 @@ export default function HomePage() {
       <SceneLoader load={() => import('../components/home/HeroScene')} />
       <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
         <img src="/images/bg/home.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
-        <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/20 to-dark/90" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, var(--overlay-from), var(--overlay-to))' }} />
         <div className="absolute inset-0 bg-grain" />
       </div>
       <div className="relative z-10">
@@ -33,7 +33,7 @@ export default function HomePage() {
             <div className="lg:w-1/3 shrink-0">
               <ScrollReveal>
                 <h2 className="section-heading mb-4">What I Do</h2>
-                <p className="text-light/70 leading-relaxed text-sm max-w-xs">
+                <p className="leading-relaxed text-sm max-w-xs" style={{ color: 'var(--text-muted)' }}>
                   Technologies and disciplines I work with daily to build impactful digital experiences.
                 </p>
               </ScrollReveal>

@@ -2,7 +2,7 @@ import { Mail } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/5 py-8" role="contentinfo">
+    <footer className="border-t py-8" role="contentinfo" style={{ borderColor: 'var(--footer-border)' }}>
       <div className="section-container !py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-xs text-muted-light">
           &copy; {new Date().getFullYear()} Aarush Karak.

@@ -9,6 +9,8 @@ import ScrollTopButton from './components/layout/ScrollTopButton'
 import LoadingScreen from './components/loading/LoadingScreen'
 import CustomCursor from './components/cursor/CustomCursor'
 import SmoothScroll from './components/layout/SmoothScroll'
+import TerminalOverlay from './components/terminal/TerminalOverlay'
+import GestureControls from './components/gesture/GestureControls'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
@@ -16,6 +18,8 @@ const ExperiencePage = lazy(() => import('./pages/ExperiencePage'))
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage'))
 const SkillsPage = lazy(() => import('./pages/SkillsPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
+const BlogPage = lazy(() => import('./pages/BlogPage'))
+const BlogPostPage = lazy(() => import('./pages/BlogPostPage'))
 
 function PageTransition({ children }: { children: React.ReactNode }) {
   return (
@@ -45,7 +49,7 @@ function App() {
 
   return (
     <HelmetProvider>
-      <div className="min-h-screen bg-dark">
+      <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
         <LoadingScreen />
         <SkipLink />
         <CustomCursor />
@@ -61,6 +65,8 @@ function App() {
                   <Route path="/projects" element={<PageTransition><ProjectsPage /></PageTransition>} />
                   <Route path="/skills" element={<PageTransition><SkillsPage /></PageTransition>} />
                   <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+                  <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
+                  <Route path="/blog/:slug" element={<PageTransition><BlogPostPage /></PageTransition>} />
                 </Routes>
               </AnimatePresence>
             </Suspense>
@@ -68,6 +74,8 @@ function App() {
           <Footer />
         </SmoothScroll>
         <ScrollTopButton />
+        <TerminalOverlay />
+        <GestureControls />
       </div>
     </HelmetProvider>
   )

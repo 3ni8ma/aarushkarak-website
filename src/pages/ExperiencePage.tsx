@@ -9,7 +9,7 @@ export default function ExperiencePage() {
       <SceneLoader load={() => import('../components/sections/ExperienceScene')} />
       <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
         <img src="/images/bg/experience.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
-        <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/30 to-dark/95" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, var(--overlay-from), var(--overlay-to))' }} />
         <div className="absolute inset-0 bg-grain opacity-50" />
       </div>
       <div className="relative z-10 page-container">

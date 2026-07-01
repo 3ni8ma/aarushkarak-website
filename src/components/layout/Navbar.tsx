@@ -10,6 +10,7 @@ const links = [
   { to: '/about', label: 'About' },
   { to: '/experience', label: 'Experience' },
   { to: '/skills', label: 'Skills' },
+  { to: '/blog', label: 'Blog' },
   { to: '/contact', label: 'Contact' },
 ]
 
@@ -46,9 +47,11 @@ export default function Navbar() {
       transition={{ delay: 1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-dark/80 backdrop-blur-xl border-b border-white/[0.03]'
+          ? 'backdrop-blur-xl border-b'
           : 'bg-transparent'
-      }`} role="navigation" aria-label="Main navigation">
+      }`}
+      style={scrolled ? { background: 'var(--nav-bg)', borderColor: 'var(--nav-border)' } : undefined}
+      role="navigation" aria-label="Main navigation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="group flex items-center gap-1 text-xl font-sans font-bold tracking-wide" aria-label="Home page">
@@ -56,7 +59,7 @@ export default function Navbar() {
             <span className="text-pop-primary transition-all duration-300 group-hover:shadow-[0_0_12px_rgba(var(--color-primary),0.5)]" style={{ color: 'rgb(var(--color-primary))' }}>.</span>
           </Link>
           <div className="hidden md:flex items-center gap-1">
-            <div ref={navRef} className="relative flex items-center gap-1 px-1 py-1 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}>
+            <div ref={navRef} className="relative flex items-center gap-1 px-1 py-1 rounded-full" style={{ backgroundColor: 'var(--border-subtle)' }}>
               <span
                 ref={indicatorRef}
                 className="absolute top-1 bottom-1 rounded-full transition-all duration-400 ease-out pointer-events-none"
@@ -77,7 +80,7 @@ export default function Navbar() {
                 </Link>
               ))}
             </div>
-            <div className="flex items-center gap-2 ml-3 pl-3" style={{ borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="flex items-center gap-2 ml-3 pl-3" style={{ borderLeft: '1px solid var(--border-subtle)' }}>
               <ThemeToggle />
               <a
                 href="/resume.pdf"
