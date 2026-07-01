@@ -22,9 +22,7 @@ export default function TerminalOverlay() {
   const cmdHistory = useRef<string[]>([])
 
   const addOutput = useCallback((result: CommandResult) => {
-    if (result.text) {
-      setHistory(h => [...h, { type: result.type || 'output', text: result.text }])
-    }
+    setHistory(h => [...h, { type: result.type || 'output', text: result.text || '' }])
     if (result.clear) {
       setHistory([])
     }

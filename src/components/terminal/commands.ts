@@ -58,7 +58,6 @@ const asciiArt: Record<string, string> = {
 
 export const commands: Record<string, CommandHandler> = {
   help: () => {
-    const cmdList = Object.keys(commands).sort()
     const lines = ['Available commands:', '']
     const groups: Record<string, string[]> = {
       Navigation: ['about', 'blog', 'contact', 'experience', 'home', 'projects', 'skills'],
@@ -204,4 +203,4 @@ const descriptions: Record<string, string> = {
   ai: 'Show AI badge',
 }
 
-const posts = 'hello-world/  building-helios/  spatial-computing-future/'
+const posts = ['hello-world/', 'building-helios/', 'spatial-computing-future/']

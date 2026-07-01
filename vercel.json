@@ -2,7 +2,7 @@
   "github": {
     "silent": true
   },
-  "buildCommand": "npm run build",
+  "buildCommand": "vite build",
   "outputDirectory": "dist",
   "framework": "vite"
 }

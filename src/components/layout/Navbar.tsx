@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 import { FileText } from 'lucide-react'
 import { useTheme } from '../../contexts/ThemeContext'
-import ThemeToggle from './ThemeToggle'
+
 
 const links = [
   { to: '/', label: 'Home' },
@@ -81,7 +81,6 @@ export default function Navbar() {
               ))}
             </div>
             <div className="flex items-center gap-2 ml-3 pl-3" style={{ borderLeft: '1px solid var(--border-subtle)' }}>
-              <ThemeToggle />
               <a
                 href="/resume.pdf"
                 target="_blank"
@@ -113,9 +112,6 @@ export default function Navbar() {
       {open && (
         <div className="md:hidden bg-dark/95 backdrop-blur-xl border-t border-white/5">
           <div className="px-4 py-4 space-y-2">
-            <div className="px-3 py-2">
-              <ThemeToggle />
-            </div>
             {links.map(l => (
               <Link
                 key={l.to}

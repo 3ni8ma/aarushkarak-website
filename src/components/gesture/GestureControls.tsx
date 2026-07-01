@@ -1,28 +1,24 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import type { NormalizedLandmark } from '@mediapipe/tasks-vision'
+import type { NormalizedLandmark, HandLandmarker } from '@mediapipe/tasks-vision'
 
-type Gesture = 'none' | 'swipe_left' | 'swipe_right' | 'pinch' | 'open_palm' | 'fist' | 'point' | 'peace'
+type Gesture = 'none' | 'pinch' | 'point' | 'fist'
 
+const SAME_COOLDOWN = 800
+const SCROLL_AMOUNT = 500
 const pages = ['/', '/about', '/experience', '/skills', '/blog', '/contact']
 
-const GESTURE_COOLDOWN = 1000
-const SWIPE_THRESHOLD = 0.12
-
 const GESTURE_INFO = [
-  { gesture: 'swipe_left', icon: '←', label: 'Swipe Left', desc: 'Next page' },
-  { gesture: 'swipe_right', icon: '→', label: 'Swipe Right', desc: 'Previous page' },
-  { gesture: 'open_palm', icon: '✋', label: 'Open Palm', desc: 'Open terminal' },
-  { gesture: 'pinch', icon: '⊹', label: 'Pinch', desc: 'Toggle theme' },
-  { gesture: 'point', icon: '☝', label: 'Point', desc: 'Home' },
-  { gesture: 'fist', icon: '✊', label: 'Fist', desc: 'Back to home' },
+  { icon: '⊹', label: 'Pinch', desc: 'Scroll down' },
+  { icon: '☝', label: 'Point', desc: 'Scroll up' },
+  { icon: '✊', label: 'Fist', desc: 'Next tab' },
 ] as const
 
 function distance(a: NormalizedLandmark, b: NormalizedLandmark): number {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2)
 }
 
-function interpretGesture(landmarks: NormalizedLandmark[]): Gesture {
+function classifyGesture(landmarks: NormalizedLandmark[]): Gesture {
   const thumbTip = landmarks[4]
   const indexTip = landmarks[8]
   const indexPip = landmarks[6]
@@ -34,25 +30,22 @@ function interpretGesture(landmarks: NormalizedLandmark[]): Gesture {
   const pinkyPip = landmarks[18]
 
   const thumbIndexDist = distance(thumbTip, indexTip)
-  const indexExtended = distance(indexTip, indexPip) > 0.07
-  const middleExtended = distance(middleTip, middlePip) > 0.07
-  const ringExtended = distance(ringTip, ringPip) > 0.07
-  const pinkyExtended = distance(pinkyTip, pinkyPip) > 0.07
-  const allExtended = indexExtended && middleExtended && ringExtended && pinkyExtended
-  const allCurled = !indexExtended && !middleExtended && !ringExtended && !pinkyExtended
+  const indexExt = distance(indexTip, indexPip) > 0.07
+  const middleExt = distance(middleTip, middlePip) > 0.07
+  const ringExt = distance(ringTip, ringPip) > 0.07
+  const pinkyExt = distance(pinkyTip, pinkyPip) > 0.07
+  const allCurled = !indexExt && !middleExt && !ringExt && !pinkyExt
 
-  if (thumbIndexDist < 0.05) return 'pinch'
-  if (allExtended) return 'open_palm'
+  if (thumbIndexDist < 0.045) return 'pinch'
   if (allCurled) return 'fist'
-  if (indexExtended && !middleExtended && !ringExtended && !pinkyExtended) return 'point'
-  if (indexExtended && middleExtended && !ringExtended && !pinkyExtended) return 'peace'
+  if (indexExt && !middleExt && !ringExt && !pinkyExt) return 'point'
 
   return 'none'
 }
 
 export default function GestureControls() {
-  const [cameraEnabled, setCameraEnabled] = useState(false)
-  const [handLandmarker, setHandLandmarker] = useState<HandLandmarker | null>(null)
+  const [enabled, setEnabled] = useState(false)
+  const [ready, setReady] = useState(false)
   const [currentGesture, setCurrentGesture] = useState<Gesture>('none')
   const [showGuide, setShowGuide] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
@@ -60,177 +53,143 @@ export default function GestureControls() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
-  const lastGestureTime = useRef(0)
-  const lastWristX = useRef(0)
+  const landmarkerRef = useRef<HandLandmarker | null>(null)
+  const lastTimes = useRef<Record<Gesture, number>>({ none: 0, pinch: 0, point: 0, fist: 0 })
+  const gestureBuffer = useRef<Gesture[]>([])
+  const intervalId = useRef<number>(0)
   const navigate = useNavigate()
   const location = useLocation()
-  const animFrameId = useRef<number>(0)
-  const runningRef = useRef(true)
+
+  const fireGesture = useCallback((gesture: Gesture) => {
+    const now = Date.now()
+    if (now - lastTimes.current[gesture] < SAME_COOLDOWN) return
+
+    lastTimes.current[gesture] = now
+    setCurrentGesture(gesture)
+    setTimeout(() => setCurrentGesture('none'), 300)
+
+    switch (gesture) {
+      case 'pinch':
+        window.scrollBy(0, SCROLL_AMOUNT)
+        break
+      case 'point':
+        window.scrollBy(0, -SCROLL_AMOUNT)
+        break
+      case 'fist':
+        navigate(pages[(pages.indexOf(location.pathname) + 1) % pages.length])
+        break
+    }
+  }, [navigate, location.pathname])
+
+  const processFrame = useCallback(() => {
+    const video = videoRef.current
+    const canvas = canvasRef.current
+    const landmarker = landmarkerRef.current
+    if (!video || !canvas || !landmarker || video.readyState < 2) return
+
+    const ctx = canvas.getContext('2d')
+    let result
+    try {
+      result = landmarker.detectForVideo(video, performance.now())
+    } catch {
+      return
+    }
+
+    if (!result.landmarks || result.landmarks.length === 0) {
+      if (showDebug && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height)
+      gestureBuffer.current = []
+      return
+    }
+
+    const lm = result.landmarks[0]
+    const gesture = classifyGesture(lm)
+
+    gestureBuffer.current.push(gesture)
+    if (gestureBuffer.current.length > 5) gestureBuffer.current.shift()
+
+    const counts: Record<string, number> = { none: 0, pinch: 0, point: 0, fist: 0 }
+    for (const g of gestureBuffer.current) counts[g]++
+
+    const smoothed = (Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0] || 'none') as Gesture
+    if (smoothed !== 'none') fireGesture(smoothed)
+
+    if (showDebug && ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      drawLandmarks(ctx, lm, canvas.width, canvas.height)
+    } else if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+  }, [showDebug, fireGesture])
 
   useEffect(() => {
-    if (!cameraEnabled) return
-    let mounted = true
-    async function init() {
+    if (!enabled) {
+      setReady(false)
+      return
+    }
+
+    let cancelled = false
+
+    async function setup() {
       try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 320, height: 240, facingMode: 'user' },
+        })
+        if (cancelled) { stream.getTracks().forEach(t => t.stop()); return }
+        streamRef.current = stream
+        if (videoRef.current) videoRef.current.srcObject = stream
+
         const { HandLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision')
+        if (cancelled) return
+
         const vision = await FilesetResolver.forVisionTasks(
           'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm/'
         )
+        if (cancelled) return
+
         const landmarker = await HandLandmarker.createFromOptions(vision, {
           baseOptions: {
             modelAssetPath:
               'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
-            delegate: 'CPU',
+            delegate: 'GPU',
           },
           runningMode: 'VIDEO',
           numHands: 1,
         })
-        if (mounted) setHandLandmarker(landmarker)
+        if (cancelled) { landmarker.close(); return }
+
+        landmarkerRef.current = landmarker
+        setReady(true)
+        intervalId.current = window.setInterval(processFrame, 200)
       } catch (err) {
-        console.error('MediaPipe init failed:', err)
-        setError('Gesture model failed to load')
-        if (mounted) setCameraEnabled(false)
+        console.error('Gesture setup failed:', err)
+        setError(err instanceof DOMException && err.name === 'NotAllowedError'
+          ? 'Webcam access denied'
+          : 'Failed to initialize gesture controls')
       }
     }
-    init()
-    return () => { mounted = false }
-  }, [cameraEnabled])
 
-  useEffect(() => {
-    if (!cameraEnabled) return
-    let mounted = true
-    async function startCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240, facingMode: 'user' } })
-        if (!mounted) {
-          stream.getTracks().forEach(t => t.stop())
-          return
-        }
-        streamRef.current = stream
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-        }
-      } catch {
-        setError('Webcam access denied')
-        if (mounted) setCameraEnabled(false)
-      }
-    }
-    startCamera()
-    return () => {
-      mounted = false
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop())
-        streamRef.current = null
-      }
-    }
-  }, [cameraEnabled])
-
-  useEffect(() => {
-    if (!handLandmarker || !cameraEnabled) return
-    let lastTimestamp = 0
-    runningRef.current = true
-
-    async function processFrame(timestamp: number) {
-      if (!runningRef.current) return
-      if (!videoRef.current || !canvasRef.current || !handLandmarker) {
-        animFrameId.current = requestAnimationFrame(processFrame)
-        return
-      }
-
-      const video = videoRef.current
-      if (video.readyState < 2) {
-        animFrameId.current = requestAnimationFrame(processFrame)
-        return
-      }
-
-      if (timestamp - lastTimestamp > 200) {
-        lastTimestamp = timestamp
-        try {
-          const result = handLandmarker.detectForVideo(video, timestamp)
-          const canvas = canvasRef.current
-          const ctx = canvas.getContext('2d')
-          if (!ctx) return
-
-          if (result.landmarks && result.landmarks.length > 0) {
-            const lm = result.landmarks[0]
-            const gesture = interpretGesture(lm)
-            const now = Date.now()
-            const wristX = lm[0].x
-            if (lastWristX.current === 0) {
-              lastWristX.current = wristX
-            }
-            const dx = wristX - lastWristX.current
-            if (Math.abs(dx) > SWIPE_THRESHOLD && now - lastGestureTime.current > GESTURE_COOLDOWN) {
-              lastGestureTime.current = now
-              lastWristX.current = wristX
-              const dir = dx > 0 ? 'right' : 'left'
-              setCurrentGesture(dir === 'right' ? 'swipe_right' : 'swipe_left')
-              handleSwipe(dir as 'left' | 'right')
-              setTimeout(() => setCurrentGesture('none'), 600)
-            } else if (gesture !== 'none' && now - lastGestureTime.current > GESTURE_COOLDOWN) {
-              lastGestureTime.current = now
-              setCurrentGesture(gesture)
-              handleGesture(gesture)
-              setTimeout(() => setCurrentGesture('none'), 600)
-            }
-            lastWristX.current = wristX
-
-            if (showDebug) {
-              ctx.clearRect(0, 0, canvas.width, canvas.height)
-              drawLandmarks(ctx, lm, canvas.width, canvas.height)
-            } else {
-              ctx.clearRect(0, 0, canvas.width, canvas.height)
-            }
-          } else if (showDebug) {
-            ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
-          }
-        } catch {
-          // detection errors are non-fatal
-        }
-      }
-      animFrameId.current = requestAnimationFrame(processFrame)
-    }
-    animFrameId.current = requestAnimationFrame(processFrame)
+    setup()
 
     return () => {
-      runningRef.current = false
-      cancelAnimationFrame(animFrameId.current)
+      cancelled = true
+      clearInterval(intervalId.current)
+      if (landmarkerRef.current) { landmarkerRef.current.close(); landmarkerRef.current = null }
+      if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null }
+      setReady(false)
     }
-  }, [handLandmarker, cameraEnabled, showDebug])
+  }, [enabled, processFrame])
 
-  const handleSwipe = useCallback((dir: 'left' | 'right') => {
-    const idx = pages.indexOf(location.pathname)
-    const target = dir === 'left' ? idx + 1 : idx - 1
-    if (target >= 0 && target < pages.length) {
-      navigate(pages[target])
-    }
-  }, [location.pathname, navigate])
-
-  const handleGesture = useCallback((gesture: Gesture) => {
-    switch (gesture) {
-      case 'open_palm':
-        window.dispatchEvent(new KeyboardEvent('keydown', { ctrlKey: true, key: '`' }))
-        break
-      case 'fist':
-        navigate('/')
-        break
-      case 'point':
-        navigate('/')
-        break
-    }
-  }, [navigate])
-
-  const toggleCamera = useCallback(() => {
-    setError(null)
-    setCameraEnabled(c => !c)
-  }, [])
+  const toggle = useCallback(() => {
+    if (!enabled) setError(null)
+    setEnabled(e => !e)
+  }, [enabled])
 
   return (
     <>
       <div className="fixed bottom-20 right-8 z-50 flex flex-col items-end gap-2">
-        {!cameraEnabled ? (
+        {!enabled ? (
           <button
-            onClick={toggleCamera}
+            onClick={toggle}
             onMouseEnter={() => setShowGuide(true)}
             onMouseLeave={() => setShowGuide(false)}
             className="flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium transition-all backdrop-blur-xl hover:scale-105"
@@ -240,7 +199,6 @@ export default function GestureControls() {
               color: 'var(--text-muted)',
             }}
             aria-label="Enable gesture controls"
-            title="Enable gesture controls (requires webcam)"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 8h1a4 4 0 0 1 4 4v1a4 4 0 0 1-4 4h-1"/>
@@ -254,7 +212,7 @@ export default function GestureControls() {
         ) : (
           <>
             <button
-              onClick={toggleCamera}
+              onClick={toggle}
               className="flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium transition-all backdrop-blur-xl hover:scale-105"
               style={{
                 background: currentGesture !== 'none' ? 'rgba(var(--color-primary),0.15)' : 'var(--glass-bg)',
@@ -262,10 +220,10 @@ export default function GestureControls() {
                 color: currentGesture !== 'none' ? 'rgb(var(--color-primary))' : 'var(--text-muted)',
               }}
             >
-              <span className={`inline-block w-2 h-2 rounded-full ${handLandmarker ? 'bg-green-500' : 'bg-yellow-500 animate-pulse'}`} />
+              <span className={`inline-block w-2 h-2 rounded-full ${ready ? 'bg-green-500' : 'bg-yellow-500 animate-pulse'}`} />
               {currentGesture !== 'none' ? (
-                <span>{currentGesture.replace('_', ' ')}</span>
-              ) : handLandmarker ? (
+                <span>{currentGesture}</span>
+              ) : ready ? (
                 'Active'
               ) : 'Loading...'}
             </button>
@@ -313,7 +271,7 @@ export default function GestureControls() {
             </div>
             <div className="flex flex-col gap-1.5">
               {GESTURE_INFO.map(g => (
-                <div key={g.gesture} className="flex items-center gap-2">
+                <div key={g.label} className="flex items-center gap-2">
                   <span className="w-5 text-center">{g.icon}</span>
                   <div>
                     <span style={{ color: 'var(--text-primary)' }}>{g.label}</span>
