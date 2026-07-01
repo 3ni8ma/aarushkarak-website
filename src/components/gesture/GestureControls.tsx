@@ -59,65 +59,14 @@ export default function GestureControls() {
   const lastGestureTime = useRef(0)
   const frameId = useRef(0)
   const frameCount = useRef(0)
+  const debugRef = useRef(false)
   const navigate = useNavigate()
   const location = useLocation()
+  const pathRef = useRef(location.pathname)
 
-  const fireGesture = useCallback((gesture: Gesture) => {
-    const now = Date.now()
-    if (gesture === lastGesture.current && now - lastGestureTime.current < COOLDOWN) return
+  useEffect(() => { pathRef.current = location.pathname }, [location.pathname])
 
-    lastGesture.current = gesture
-    lastGestureTime.current = now
-    setCurrentGesture(gesture)
-    setTimeout(() => setCurrentGesture('none'), 300)
-
-    switch (gesture) {
-      case 'pinch':
-        window.scrollBy(0, SCROLL_AMOUNT)
-        break
-      case 'point':
-        window.scrollBy(0, -SCROLL_AMOUNT)
-        break
-      case 'fist':
-        navigate(pages[(pages.indexOf(location.pathname) + 1) % pages.length])
-        break
-    }
-  }, [navigate, location.pathname])
-
-  const detect = useCallback(() => {
-    const video = videoRef.current
-    const canvas = canvasRef.current
-    const landmarker = landmarkerRef.current
-    if (!video || !canvas || !landmarker || video.readyState < 2) return
-
-    let result
-    try {
-      result = landmarker.detectForVideo(video, performance.now())
-    } catch {
-      return
-    }
-
-    const ctx = canvas.getContext('2d')
-    if (!result.landmarks || result.landmarks.length === 0) {
-      if (showDebug && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height)
-      return
-    }
-
-    const lm = result.landmarks[0]
-    const gesture = classifyGesture(lm)
-    if (gesture !== 'none') fireGesture(gesture)
-
-    if (showDebug && ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      drawLandmarks(ctx, lm, canvas.width, canvas.height)
-    }
-  }, [showDebug, fireGesture])
-
-  const loop = useCallback(() => {
-    frameCount.current++
-    if (frameCount.current % SKIP_FRAMES === 0) detect()
-    frameId.current = requestAnimationFrame(loop)
-  }, [detect])
+  debugRef.current = showDebug
 
   useEffect(() => {
     if (!enabled) {
@@ -126,6 +75,64 @@ export default function GestureControls() {
     }
 
     let cancelled = false
+
+    function fireGesture(gesture: Gesture) {
+      const now = Date.now()
+      if (gesture === lastGesture.current && now - lastGestureTime.current < COOLDOWN) return
+
+      lastGesture.current = gesture
+      lastGestureTime.current = now
+      setCurrentGesture(gesture)
+      setTimeout(() => setCurrentGesture('none'), 300)
+
+      switch (gesture) {
+        case 'pinch':
+          window.scrollBy(0, SCROLL_AMOUNT)
+          break
+        case 'point':
+          window.scrollBy(0, -SCROLL_AMOUNT)
+          break
+        case 'fist':
+          navigate(pages[(pages.indexOf(pathRef.current) + 1) % pages.length])
+          break
+      }
+    }
+
+    function detect() {
+      const video = videoRef.current
+      const canvas = canvasRef.current
+      const landmarker = landmarkerRef.current
+      if (!video || !canvas || !landmarker || video.readyState < 2) return
+
+      const ctx = canvas.getContext('2d')
+      let result
+      try {
+        result = landmarker.detectForVideo(video, performance.now())
+      } catch {
+        return
+      }
+
+      if (!result.landmarks || result.landmarks.length === 0) {
+        if (debugRef.current && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height)
+        return
+      }
+
+      const lm = result.landmarks[0]
+      const gesture = classifyGesture(lm)
+      if (gesture !== 'none') fireGesture(gesture)
+
+      if (debugRef.current && ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        drawLandmarks(ctx, lm, canvas.width, canvas.height)
+      }
+    }
+
+    function loop() {
+      if (cancelled) return
+      frameCount.current++
+      if (frameCount.current % SKIP_FRAMES === 0) detect()
+      frameId.current = requestAnimationFrame(loop)
+    }
 
     async function setup() {
       try {
@@ -180,7 +187,7 @@ export default function GestureControls() {
       if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null }
       setReady(false)
     }
-  }, [enabled, loop])
+  }, [enabled, navigate])
 
   const toggle = useCallback(() => {
     if (!enabled) setError(null)
