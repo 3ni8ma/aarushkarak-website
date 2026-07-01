@@ -11,8 +11,8 @@ const pages = ['/', '/about', '/experience', '/skills', '/blog', '/contact']
 
 const GESTURE_INFO = [
   { icon: '⊹', label: 'Pinch', desc: 'Scroll down' },
-  { icon: '☝', label: 'Point', desc: 'Scroll up' },
-  { icon: '✊', label: 'Fist', desc: 'Next tab' },
+  { icon: '☝', label: 'Point', desc: 'Scroll up (back of hand)' },
+  { icon: '✊', label: 'Fist', desc: 'Next tab (back of hand)' },
 ] as const
 
 function distance(a: NormalizedLandmark, b: NormalizedLandmark): number {
