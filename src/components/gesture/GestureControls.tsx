@@ -4,8 +4,9 @@ import type { NormalizedLandmark, HandLandmarker } from '@mediapipe/tasks-vision
 
 type Gesture = 'none' | 'pinch' | 'point' | 'fist'
 
-const SAME_COOLDOWN = 800
 const SCROLL_AMOUNT = 500
+const SKIP_FRAMES = 30
+const COOLDOWN = 1000
 const pages = ['/', '/about', '/experience', '/skills', '/blog', '/contact']
 
 const GESTURE_INFO = [
@@ -54,17 +55,19 @@ export default function GestureControls() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const landmarkerRef = useRef<HandLandmarker | null>(null)
-  const lastTimes = useRef<Record<Gesture, number>>({ none: 0, pinch: 0, point: 0, fist: 0 })
-  const gestureBuffer = useRef<Gesture[]>([])
-  const intervalId = useRef<number>(0)
+  const lastGesture = useRef<Gesture>('none')
+  const lastGestureTime = useRef(0)
+  const frameId = useRef(0)
+  const frameCount = useRef(0)
   const navigate = useNavigate()
   const location = useLocation()
 
   const fireGesture = useCallback((gesture: Gesture) => {
     const now = Date.now()
-    if (now - lastTimes.current[gesture] < SAME_COOLDOWN) return
+    if (gesture === lastGesture.current && now - lastGestureTime.current < COOLDOWN) return
 
-    lastTimes.current[gesture] = now
+    lastGesture.current = gesture
+    lastGestureTime.current = now
     setCurrentGesture(gesture)
     setTimeout(() => setCurrentGesture('none'), 300)
 
@@ -81,13 +84,12 @@ export default function GestureControls() {
     }
   }, [navigate, location.pathname])
 
-  const processFrame = useCallback(() => {
+  const detect = useCallback(() => {
     const video = videoRef.current
     const canvas = canvasRef.current
     const landmarker = landmarkerRef.current
     if (!video || !canvas || !landmarker || video.readyState < 2) return
 
-    const ctx = canvas.getContext('2d')
     let result
     try {
       result = landmarker.detectForVideo(video, performance.now())
@@ -95,31 +97,27 @@ export default function GestureControls() {
       return
     }
 
+    const ctx = canvas.getContext('2d')
     if (!result.landmarks || result.landmarks.length === 0) {
       if (showDebug && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height)
-      gestureBuffer.current = []
       return
     }
 
     const lm = result.landmarks[0]
     const gesture = classifyGesture(lm)
-
-    gestureBuffer.current.push(gesture)
-    if (gestureBuffer.current.length > 5) gestureBuffer.current.shift()
-
-    const counts: Record<string, number> = { none: 0, pinch: 0, point: 0, fist: 0 }
-    for (const g of gestureBuffer.current) counts[g]++
-
-    const smoothed = (Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0] || 'none') as Gesture
-    if (smoothed !== 'none') fireGesture(smoothed)
+    if (gesture !== 'none') fireGesture(gesture)
 
     if (showDebug && ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       drawLandmarks(ctx, lm, canvas.width, canvas.height)
-    } else if (ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
     }
   }, [showDebug, fireGesture])
+
+  const loop = useCallback(() => {
+    frameCount.current++
+    if (frameCount.current % SKIP_FRAMES === 0) detect()
+    frameId.current = requestAnimationFrame(loop)
+  }, [detect])
 
   useEffect(() => {
     if (!enabled) {
@@ -129,15 +127,22 @@ export default function GestureControls() {
 
     let cancelled = false
 
-    async function tryInit(): Promise<boolean> {
+    async function setup() {
       try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 160, height: 120, facingMode: 'user' },
+        })
+        if (cancelled) { stream.getTracks().forEach(t => t.stop()); return }
+        streamRef.current = stream
+        if (videoRef.current) videoRef.current.srcObject = stream
+
         const { HandLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision')
-        if (cancelled) return false
+        if (cancelled) return
 
         const vision = await FilesetResolver.forVisionTasks(
           'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm/'
         )
-        if (cancelled) return false
+        if (cancelled) return
 
         const landmarker = await HandLandmarker.createFromOptions(vision, {
           baseOptions: {
@@ -148,29 +153,11 @@ export default function GestureControls() {
           runningMode: 'VIDEO',
           numHands: 1,
         })
-        if (cancelled) { landmarker.close(); return false }
+        if (cancelled) { landmarker.close(); return }
 
         landmarkerRef.current = landmarker
         setReady(true)
-        intervalId.current = window.setInterval(processFrame, 200)
-        return true
-      } catch {
-        return false
-      }
-    }
-
-    async function setup() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 320, height: 240, facingMode: 'user' },
-        })
-        if (cancelled) { stream.getTracks().forEach(t => t.stop()); return }
-        streamRef.current = stream
-        if (videoRef.current) videoRef.current.srcObject = stream
-
-        if (!(await tryInit())) {
-          setError('Gesture model failed to load. Check console.')
-        }
+        frameId.current = requestAnimationFrame(loop)
       } catch (err) {
         console.error('Gesture setup failed:', err)
         const msg = err instanceof DOMException
@@ -188,12 +175,12 @@ export default function GestureControls() {
 
     return () => {
       cancelled = true
-      clearInterval(intervalId.current)
+      cancelAnimationFrame(frameId.current)
       if (landmarkerRef.current) { landmarkerRef.current.close(); landmarkerRef.current = null }
       if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null }
       setReady(false)
     }
-  }, [enabled, processFrame])
+  }, [enabled, loop])
 
   const toggle = useCallback(() => {
     if (!enabled) setError(null)
@@ -312,8 +299,8 @@ export default function GestureControls() {
       <video ref={videoRef} autoPlay playsInline muted className="hidden" />
       <canvas
         ref={canvasRef}
-        width={320}
-        height={240}
+        width={160}
+        height={120}
         className="fixed bottom-4 right-4 z-50 rounded-xl shadow-lg pointer-events-none"
         style={{ width: 80, height: 60, display: showDebug ? 'block' : 'none' }}
       />
