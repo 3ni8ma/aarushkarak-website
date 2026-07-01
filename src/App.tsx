@@ -10,7 +10,6 @@ import LoadingScreen from './components/loading/LoadingScreen'
 import CustomCursor from './components/cursor/CustomCursor'
 import SmoothScroll from './components/layout/SmoothScroll'
 import TerminalOverlay from './components/terminal/TerminalOverlay'
-import GestureControls from './components/gesture/GestureControls'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
@@ -75,7 +74,6 @@ function App() {
         </SmoothScroll>
         <ScrollTopButton />
         <TerminalOverlay />
-        <GestureControls />
       </div>
     </HelmetProvider>
   )
