@@ -37,9 +37,9 @@ function classifyGesture(landmarks: NormalizedLandmark[]): Gesture {
   const pinkyExt = distance(pinkyTip, pinkyPip) > 0.07
   const allCurled = !indexExt && !middleExt && !ringExt && !pinkyExt
 
-  if (thumbIndexDist < 0.045) return 'pinch'
   if (allCurled) return 'fist'
-  if (indexExt && !middleExt && !ringExt && !pinkyExt) return 'point'
+  if (indexExt && !middleExt && !ringExt && !pinkyExt && thumbIndexDist > 0.05) return 'point'
+  if (thumbIndexDist < 0.035) return 'pinch'
 
   return 'none'
 }
