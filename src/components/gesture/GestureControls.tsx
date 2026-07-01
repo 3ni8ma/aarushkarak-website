@@ -129,7 +129,7 @@ export default function GestureControls() {
 
     let cancelled = false
 
-    async function tryInit(delegate: 'GPU' | 'CPU' = 'GPU'): Promise<boolean> {
+    async function tryInit(): Promise<boolean> {
       try {
         const { HandLandmarker, FilesetResolver } = await import('@mediapipe/tasks-vision')
         if (cancelled) return false
@@ -143,7 +143,7 @@ export default function GestureControls() {
           baseOptions: {
             modelAssetPath:
               'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
-            delegate,
+            delegate: 'CPU',
           },
           runningMode: 'VIDEO',
           numHands: 1,
@@ -168,11 +168,8 @@ export default function GestureControls() {
         streamRef.current = stream
         if (videoRef.current) videoRef.current.srcObject = stream
 
-        if (!(await tryInit('GPU'))) {
-          if (cancelled) return
-          if (!(await tryInit('CPU'))) {
-            setError('Gesture model failed to load (GPU+CPU). Check console.')
-          }
+        if (!(await tryInit())) {
+          setError('Gesture model failed to load. Check console.')
         }
       } catch (err) {
         console.error('Gesture setup failed:', err)
