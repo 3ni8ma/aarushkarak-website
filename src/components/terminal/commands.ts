@@ -178,6 +178,8 @@ export const commands: Record<string, CommandHandler> = {
   ai: () => ({ text: asciiArt.ai, type: 'output' }),
 }
 
+
+
 const descriptions: Record<string, string> = {
   about: 'Navigate to About page',
   banner: 'Display startup banner',

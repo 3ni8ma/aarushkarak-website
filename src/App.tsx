@@ -19,6 +19,7 @@ const SkillsPage = lazy(() => import('./pages/SkillsPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
 const BlogPage = lazy(() => import('./pages/BlogPage'))
 const BlogPostPage = lazy(() => import('./pages/BlogPostPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
 function PageTransition({ children }: { children: React.ReactNode }) {
   return (
@@ -66,6 +67,7 @@ function App() {
                   <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
                   <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
                   <Route path="/blog/:slug" element={<PageTransition><BlogPostPage /></PageTransition>} />
+                  <Route path="*" element={<PageTransition><NotFoundPage /></PageTransition>} />
                 </Routes>
               </AnimatePresence>
             </Suspense>

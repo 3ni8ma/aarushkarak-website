@@ -18,9 +18,9 @@
     color: var(--text-primary);
     @apply font-sans antialiased;
     margin: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-kerning: normal;
