@@ -13,6 +13,8 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-grain opacity-50" />
       </div>
       <div className="relative z-10 page-container">
+        <div className="ambient-glow ambient-glow-secondary" style={{ width: '600px', height: '600px', top: '-5%', left: '-10%' }} aria-hidden="true" />
+        <div className="ambient-glow ambient-glow-accent" style={{ width: '400px', height: '400px', bottom: '10%', right: '-5%' }} aria-hidden="true" />
         <ContactSection />
       </div>
     </div>

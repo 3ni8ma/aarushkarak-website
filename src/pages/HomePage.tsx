@@ -28,7 +28,9 @@ export default function HomePage() {
         <HeroSection />
         <QuickStats />
 
-        <section className="section-container" aria-label="What I do">
+        <section className="section-container vignette-overlay" aria-label="What I do">
+          <div className="ambient-glow ambient-glow-secondary" style={{ width: '500px', height: '500px', top: '-10%', right: '-10%', filter: 'blur(80px)' }} aria-hidden="true" />
+          <div className="ambient-glow ambient-glow-accent" style={{ width: '400px', height: '400px', bottom: '-5%', left: '-5%', filter: 'blur(70px)' }} aria-hidden="true" />
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
             <div className="lg:w-1/3 shrink-0">
               <ScrollReveal>

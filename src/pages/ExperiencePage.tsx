@@ -13,6 +13,8 @@ export default function ExperiencePage() {
         <div className="absolute inset-0 bg-grain opacity-50" />
       </div>
       <div className="relative z-10 page-container">
+        <div className="ambient-glow ambient-glow-primary" style={{ width: '550px', height: '550px', top: '2%', left: '-8%' }} aria-hidden="true" />
+        <div className="ambient-glow ambient-glow-accent" style={{ width: '350px', height: '350px', bottom: '15%', right: '-5%' }} aria-hidden="true" />
         <ExperienceSection />
       </div>
     </div>
