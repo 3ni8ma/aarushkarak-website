@@ -29,6 +29,7 @@ export default function HomePage() {
         <QuickStats />
 
         <section className="section-container" aria-label="What I do">
+          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(var(--color-primary), 0.03) 0%, transparent 60%)' }} aria-hidden="true" />
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
             <div className="lg:w-1/3 shrink-0">
               <ScrollReveal>
