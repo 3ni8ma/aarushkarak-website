@@ -6,7 +6,7 @@ export const spatialComputing: BlogPost = {
   date: '2026-06-20',
   excerpt: 'Spatial computing is moving beyond VR headsets. The browser is becoming the most accessible platform for 3D interfaces — and we are just getting started.',
   tags: ['Spatial Computing', 'WebGL', 'Three.js', 'WebXR'],
-  image: '/images/bg/about.jpg',
+  image: '',
   content: `
 ## Beyond the Headset
 
