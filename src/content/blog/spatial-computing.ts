@@ -1,12 +1,13 @@
-import type { BlogPost } from '../blog'
+import type { BlogPost } from "../blog";
 
 export const spatialComputing: BlogPost = {
-  slug: 'spatial-computing-future',
-  title: 'The Future of Spatial Computing in the Browser',
-  date: '2026-06-20',
-  excerpt: 'Spatial computing is moving beyond VR headsets. The browser is becoming the most accessible platform for 3D interfaces — and we are just getting started.',
-  tags: ['Spatial Computing', 'WebGL', 'Three.js', 'WebXR'],
-  image: '/images/bg/about.jpg',
+  slug: "spatial-computing-future",
+  title: "The Future of Spatial Computing in the Browser",
+  date: "2026-06-20",
+  excerpt:
+    "Spatial computing is moving beyond VR headsets. The browser is becoming the most accessible platform for 3D interfaces — and we are just getting started.",
+  tags: ["Spatial Computing", "WebGL", "Three.js", "WebXR"],
+  image: "/images/bg/about.jpg",
   content: `
 ## Beyond the Headset
 
@@ -90,5 +91,5 @@ The browser's capabilities are expanding rapidly. By 2028, I expect:
 - **Gesture control** to be a built-in OS feature
 
 The line between "web app" and "native app" will continue to blur. The browser won the application platform war years ago — now it's winning the spatial computing war too.
-`
-}
+`,
+};

@@ -1,5 +1,5 @@
 // 2026-07-08 02:01:27
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
 
 interface SEOHeadProps {
   title?: string;
@@ -7,10 +7,14 @@ interface SEOHeadProps {
   path?: string;
 }
 
-export function SEOHead({ title, description, path = '' }: SEOHeadProps) {
-  const siteName = 'Aarush Karak';
-  const fullTitle = title ? `${title} | ${siteName}` : `${siteName} — Software Developer & Spatial Computing`;
-  const desc = description || 'Full-stack developer and spatial computing engineer. Building HELIOS, The Coder Bros, and open-source tools.';
+export function SEOHead({ title, description, path = "" }: SEOHeadProps) {
+  const siteName = "Aarush Karak";
+  const fullTitle = title
+    ? `${title} | ${siteName}`
+    : `${siteName} — Software Developer & Spatial Computing`;
+  const desc =
+    description ||
+    "Full-stack developer and spatial computing engineer. Building HELIOS, The Coder Bros, and open-source tools.";
   const url = `https://aarushkarak.vercel.app${path}`;
 
   return (

@@ -1,42 +1,47 @@
-import { useRef, useMemo } from 'react'
-import { type Group } from 'three'
-import { Float } from '@react-three/drei'
-import * as THREE from 'three'
+import { useRef, useMemo } from "react";
+import { type Group } from "three";
+import { Float } from "@react-three/drei";
+import * as THREE from "three";
 
-type ShapeType = 'torusKnot' | 'octahedron' | 'icosahedron' | 'dodecahedron'
+type ShapeType = "torusKnot" | "octahedron" | "icosahedron" | "dodecahedron";
 
 interface FloatingGeometryProps {
-  shape?: ShapeType
-  position?: [number, number, number]
-  color?: THREE.Color
-  size?: number
-  speed?: number
-  rotationIntensity?: number
-  floatIntensity?: number
-  opacity?: number
+  shape?: ShapeType;
+  position?: [number, number, number];
+  color?: THREE.Color;
+  size?: number;
+  speed?: number;
+  rotationIntensity?: number;
+  floatIntensity?: number;
+  opacity?: number;
 }
 
-const isMobile = typeof window !== 'undefined' && (
-  'ontouchstart' in window ||
-  navigator.maxTouchPoints > 0 ||
-  window.innerWidth < 768
-)
+const isMobile =
+  typeof window !== "undefined" &&
+  ("ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    window.innerWidth < 768);
 
 function createGeometry(shape: ShapeType) {
   switch (shape) {
-    case 'torusKnot':
-      return new THREE.TorusKnotGeometry(1, 0.35, isMobile ? 24 : 32, isMobile ? 4 : 6)
-    case 'octahedron':
-      return new THREE.OctahedronGeometry(1)
-    case 'icosahedron':
-      return new THREE.IcosahedronGeometry(1)
-    case 'dodecahedron':
-      return new THREE.DodecahedronGeometry(1)
+    case "torusKnot":
+      return new THREE.TorusKnotGeometry(
+        1,
+        0.35,
+        isMobile ? 24 : 32,
+        isMobile ? 4 : 6,
+      );
+    case "octahedron":
+      return new THREE.OctahedronGeometry(1);
+    case "icosahedron":
+      return new THREE.IcosahedronGeometry(1);
+    case "dodecahedron":
+      return new THREE.DodecahedronGeometry(1);
   }
 }
 
 export default function FloatingGeometry({
-  shape = 'torusKnot',
+  shape = "torusKnot",
   position = [0, 0, 0],
   color,
   size = 0.4,
@@ -45,11 +50,11 @@ export default function FloatingGeometry({
   floatIntensity = 0.5,
   opacity = 0.6,
 }: FloatingGeometryProps) {
-  const groupRef = useRef<Group>(null)
+  const groupRef = useRef<Group>(null);
 
-  const geometry = useMemo(() => createGeometry(shape), [shape])
+  const geometry = useMemo(() => createGeometry(shape), [shape]);
 
-  const matColor = color ?? new THREE.Color(1, 1, 1)
+  const matColor = color ?? new THREE.Color(1, 1, 1);
 
   return (
     <Float
@@ -69,5 +74,5 @@ export default function FloatingGeometry({
         </mesh>
       </group>
     </Float>
-  )
+  );
 }

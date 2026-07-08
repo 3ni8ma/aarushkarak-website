@@ -1,12 +1,13 @@
-import type { BlogPost } from '../blog'
+import type { BlogPost } from "../blog";
 
 export const helloWorld: BlogPost = {
-  slug: 'hello-world',
-  title: 'Hello, World!',
-  date: '2026-06-28',
-  excerpt: 'Welcome to my blog. A place where I share thoughts on software engineering, spatial computing, AI, and everything in between.',
-  tags: ['Personal', 'Meta'],
-  image: '/images/bg/home.jpg',
+  slug: "hello-world",
+  title: "Hello, World!",
+  date: "2026-06-28",
+  excerpt:
+    "Welcome to my blog. A place where I share thoughts on software engineering, spatial computing, AI, and everything in between.",
+  tags: ["Personal", "Meta"],
+  image: "/images/bg/home.jpg",
   content: `
 ## Welcome
 
@@ -34,5 +35,5 @@ Plus, writing forces you to understand things at a deeper level. If you can't ex
 If something here resonates with you, [reach out](/contact). I'm always happy to chat about projects, ideas, or just geek out about tech.
 
 Thanks for reading!
-`
-}
+`,
+};

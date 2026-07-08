@@ -1,6 +1,6 @@
 // 2026-07-08 02:01:27
-import { useState, useEffect, useRef } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useState, useEffect, useRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 interface AnimatedCounterProps {
   end: number;
@@ -9,7 +9,12 @@ interface AnimatedCounterProps {
   label?: string;
 }
 
-export function AnimatedCounter({ end, suffix = '', duration = 2000, label }: AnimatedCounterProps) {
+export function AnimatedCounter({
+  end,
+  suffix = "",
+  duration = 2000,
+  label,
+}: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
   const startedRef = useRef(false);
@@ -41,7 +46,10 @@ export function AnimatedCounter({ end, suffix = '', duration = 2000, label }: An
 
   return (
     <div ref={ref} className="text-center">
-      <span className="text-3xl font-bold text-white">{count}{suffix}</span>
+      <span className="text-3xl font-bold text-white">
+        {count}
+        {suffix}
+      </span>
       {label && <p className="text-sm text-gray-400 mt-1">{label}</p>}
     </div>
   );

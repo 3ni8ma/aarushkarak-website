@@ -1,43 +1,85 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Code, Award, ScrollText, ExternalLink } from 'lucide-react'
-import ScrollReveal from '../ui/ScrollReveal'
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Code, Award, ScrollText, ExternalLink } from "lucide-react";
+import ScrollReveal from "../ui/ScrollReveal";
 
 const tabs = [
-  { id: 'skills', label: 'Skills', icon: Code },
-  { id: 'certifications', label: 'Certifications', icon: ScrollText },
-  { id: 'honors', label: 'Honors', icon: Award },
-] as const
+  { id: "skills", label: "Skills", icon: Code },
+  { id: "certifications", label: "Certifications", icon: ScrollText },
+  { id: "honors", label: "Honors", icon: Award },
+] as const;
 
-const skills = ['Python', 'JavaScript', 'HTML/CSS', 'Java', 'C++', 'Three.js', 'MediaPipe', 'REST APIs', 'Arduino IDE', 'Chatbot Design', 'SQL', 'PostgreSQL', 'React', 'Node.js']
+const skills = [
+  "Python",
+  "JavaScript",
+  "HTML/CSS",
+  "Java",
+  "C++",
+  "Three.js",
+  "MediaPipe",
+  "REST APIs",
+  "Arduino IDE",
+  "Chatbot Design",
+  "SQL",
+  "PostgreSQL",
+  "React",
+  "Node.js",
+];
 
 const certifications = [
-  { name: 'Build Your Own Chatbot', file: '/certificates/build-your-own-chatbot.pdf' },
-  { name: 'Artificial Intelligence Fundamentals', file: '/certificates/ai-fundamentals.pdf' },
-  { name: 'AI Fundamentals (Badge)', file: '/certificates/ai-fundamentals-badge.png', isBadge: true },
-  { name: 'GitHub Professional Certificate', file: '/certificates/github-professional-certificate.pdf' },
-  { name: 'Claude Code in Action', file: '/certificates/claude-code-in-action.pdf' },
-  { name: 'AI Fluency: Framework & Foundations', file: '/certificates/ai-fluency-framework-foundations.pdf' },
-  { name: 'Intro to Generative AI (Badge)', file: '/certificates/intro-to-gen-ai-badge.png', isBadge: true },
-  { name: 'Advanced SQL' },
-  { name: 'Intro to Machine Learning' },
-] as const
+  {
+    name: "Build Your Own Chatbot",
+    file: "/certificates/build-your-own-chatbot.pdf",
+  },
+  {
+    name: "Artificial Intelligence Fundamentals",
+    file: "/certificates/ai-fundamentals.pdf",
+  },
+  {
+    name: "AI Fundamentals (Badge)",
+    file: "/certificates/ai-fundamentals-badge.png",
+    isBadge: true,
+  },
+  {
+    name: "GitHub Professional Certificate",
+    file: "/certificates/github-professional-certificate.pdf",
+  },
+  {
+    name: "Claude Code in Action",
+    file: "/certificates/claude-code-in-action.pdf",
+  },
+  {
+    name: "AI Fluency: Framework & Foundations",
+    file: "/certificates/ai-fluency-framework-foundations.pdf",
+  },
+  {
+    name: "Intro to Generative AI (Badge)",
+    file: "/certificates/intro-to-gen-ai-badge.png",
+    isBadge: true,
+  },
+  { name: "Advanced SQL" },
+  { name: "Intro to Machine Learning" },
+] as const;
 
 const honors = [
-  '1st Place - Video Game 3D Design (TSA State Conference 2026)',
-  'TSA Parliamentarian',
-  'Medal of Distinction - Electronic Keyboard',
-  'Certificate of Distinction - SOF Math Olympiad',
-  'Abacus Grand Master Certificate',
-]
+  "1st Place - Video Game 3D Design (TSA State Conference 2026)",
+  "TSA Parliamentarian",
+  "Medal of Distinction - Electronic Keyboard",
+  "Certificate of Distinction - SOF Math Olympiad",
+  "Abacus Grand Master Certificate",
+];
 
-type TabId = 'skills' | 'certifications' | 'honors'
+type TabId = "skills" | "certifications" | "honors";
 
 export default function SkillsSection() {
-  const [active, setActive] = useState<TabId>('skills')
+  const [active, setActive] = useState<TabId>("skills");
 
   return (
-    <section id="skills" className="section-container relative" aria-label="Skills and honors">
+    <section
+      id="skills"
+      className="section-container relative"
+      aria-label="Skills and honors"
+    >
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
         <div className="lg:w-1/3 shrink-0">
           <ScrollReveal>
@@ -50,50 +92,99 @@ export default function SkillsSection() {
         <div className="flex-1">
           <ScrollReveal>
             <div className="card-minimal overflow-hidden p-0">
-              <div className="flex border-b border-white/5" role="tablist" aria-label="Skills, certifications, and awards">
-                {tabs.map(tab => {
-                  const Icon = tab.icon
+              <div
+                className="flex border-b border-white/5"
+                role="tablist"
+                aria-label="Skills, certifications, and awards"
+              >
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
                   return (
-                    <button key={tab.id} onClick={() => setActive(tab.id as TabId)}
+                    <button
+                      key={tab.id}
+                      onClick={() => setActive(tab.id as TabId)}
                       role="tab"
                       aria-selected={active === tab.id}
                       aria-controls={`panel-${tab.id}`}
                       id={`tab-${tab.id}`}
                       className={`flex-1 flex items-center justify-center gap-2 py-4 text-sm font-medium transition-all duration-300 relative ${
-                        active === tab.id ? 'text-light bg-white/5' : 'text-muted hover:text-light'
+                        active === tab.id
+                          ? "text-light bg-white/5"
+                          : "text-muted hover:text-light"
                       }`}
                     >
                       <Icon size={15} aria-hidden="true" />
                       {tab.label}
                       {active === tab.id && (
-                        <motion.div layoutId="skill-tab-line" className="absolute bottom-0 left-0 right-0 h-0.5" style={{ backgroundColor: 'rgb(var(--color-primary))' }} />
+                        <motion.div
+                          layoutId="skill-tab-line"
+                          className="absolute bottom-0 left-0 right-0 h-0.5"
+                          style={{
+                            backgroundColor: "rgb(var(--color-primary))",
+                          }}
+                        />
                       )}
                     </button>
-                  )
+                  );
                 })}
               </div>
               <div className="p-6">
                 <AnimatePresence mode="wait">
-                  <motion.div key={active} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }}
-                    role="tabpanel" id={`panel-${active}`} aria-labelledby={`tab-${active}`}
+                  <motion.div
+                    key={active}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                    role="tabpanel"
+                    id={`panel-${active}`}
+                    aria-labelledby={`tab-${active}`}
                   >
-                    {active === 'skills' ? (
+                    {active === "skills" ? (
                       <div className="flex flex-wrap gap-2">
                         {skills.map((item) => (
-                          <span key={item} className="inline-block px-3 py-1.5 text-xs font-medium rounded-full border" style={{ borderColor: 'rgba(var(--color-primary), 0.2)', backgroundColor: 'rgba(var(--color-primary), 0.06)', color: 'rgb(var(--color-primary))' }}>
+                          <span
+                            key={item}
+                            className="inline-block px-3 py-1.5 text-xs font-medium rounded-full border"
+                            style={{
+                              borderColor: "rgba(var(--color-primary), 0.2)",
+                              backgroundColor:
+                                "rgba(var(--color-primary), 0.06)",
+                              color: "rgb(var(--color-primary))",
+                            }}
+                          >
                             {item}
                           </span>
                         ))}
                       </div>
-                    ) : active === 'certifications' ? (
+                    ) : active === "certifications" ? (
                       <ul className="space-y-3">
                         {certifications.map((cert) => (
-                          <li key={cert.name} className="flex items-start gap-3 text-xs text-light/80">
-                            <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'rgb(var(--color-primary))' }} aria-hidden="true" />
-                            {'file' in cert ? (
-                              <a href={cert.file} target="_blank" rel="noopener noreferrer" className="hover:text-light transition-colors inline-flex items-center gap-1.5" aria-label={`${cert.name} (opens in new tab)`}>
+                          <li
+                            key={cert.name}
+                            className="flex items-start gap-3 text-xs text-light/80"
+                          >
+                            <span
+                              className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                              style={{
+                                backgroundColor: "rgb(var(--color-primary))",
+                              }}
+                              aria-hidden="true"
+                            />
+                            {"file" in cert ? (
+                              <a
+                                href={cert.file}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-light transition-colors inline-flex items-center gap-1.5"
+                                aria-label={`${cert.name} (opens in new tab)`}
+                              >
                                 {cert.name}
-                                <ExternalLink size={10} className="shrink-0 opacity-60" aria-hidden="true" />
+                                <ExternalLink
+                                  size={10}
+                                  className="shrink-0 opacity-60"
+                                  aria-hidden="true"
+                                />
                               </a>
                             ) : (
                               cert.name
@@ -104,8 +195,17 @@ export default function SkillsSection() {
                     ) : (
                       <ul className="space-y-3">
                         {honors.map((item) => (
-                          <li key={item} className="flex items-start gap-3 text-xs text-light/80">
-                            <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'rgb(var(--color-primary))' }} aria-hidden="true" />
+                          <li
+                            key={item}
+                            className="flex items-start gap-3 text-xs text-light/80"
+                          >
+                            <span
+                              className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                              style={{
+                                backgroundColor: "rgb(var(--color-primary))",
+                              }}
+                              aria-hidden="true"
+                            />
                             {item}
                           </li>
                         ))}
@@ -119,5 +219,5 @@ export default function SkillsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

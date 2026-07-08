@@ -1,12 +1,13 @@
-import type { BlogPost } from '../blog'
+import type { BlogPost } from "../blog";
 
 export const buildingHelios: BlogPost = {
-  slug: 'building-helios',
-  title: 'Building HELIOS: A Browser-Based AI Operating System',
-  date: '2026-06-25',
-  excerpt: 'How I built a browser-based AI operating system with hand-gesture navigation, spatial windows, and an LLM-powered assistant — entirely in the browser.',
-  tags: ['Three.js', 'MediaPipe', 'AI', 'React'],
-  image: '/images/bg/projects.jpg',
+  slug: "building-helios",
+  title: "Building HELIOS: A Browser-Based AI Operating System",
+  date: "2026-06-25",
+  excerpt:
+    "How I built a browser-based AI operating system with hand-gesture navigation, spatial windows, and an LLM-powered assistant — entirely in the browser.",
+  tags: ["Three.js", "MediaPipe", "AI", "React"],
+  image: "/images/bg/projects.jpg",
   content: `
 ## The Idea
 
@@ -90,5 +91,5 @@ const response = await openai.chat.completions.create({
 I'm working on multi-user spatial collaboration — think Figma meets VR, but in a browser tab. The architecture is solid; now it's about building the right abstractions.
 
 The entire project is [open source on GitHub](https://github.com/3ni8ma/HELIOS).
-`
-}
+`,
+};

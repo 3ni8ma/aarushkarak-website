@@ -1,10 +1,10 @@
-import { Float } from '@react-three/drei'
-import { useThemeColors } from '../../hooks/useThemeColors'
-import SceneManager from '../three/SceneManager'
-import FloatingGeometry from '../three/FloatingGeometry'
+import { Float } from "@react-three/drei";
+import { useThemeColors } from "../../hooks/useThemeColors";
+import SceneManager from "../three/SceneManager";
+import FloatingGeometry from "../three/FloatingGeometry";
 
 export default function AboutScene() {
-  const colors = useThemeColors()
+  const colors = useThemeColors();
 
   return (
     <SceneManager cameraZ={9}>
@@ -39,5 +39,5 @@ export default function AboutScene() {
         />
       </Float>
     </SceneManager>
-  )
+  );
 }

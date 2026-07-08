@@ -3,5 +3,5 @@ export default function SceneFallback() {
     <div className="absolute inset-0 bg-dark" aria-hidden="true">
       <div className="absolute inset-0 bg-grain" />
     </div>
-  )
+  );
 }
