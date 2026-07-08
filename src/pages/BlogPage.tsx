@@ -9,6 +9,11 @@ export default function BlogPage() {
   return (
     <div className="relative">
       <SEOHead path="/blog" title="Blog" description="Articles and thoughts on software engineering, spatial computing, AI, and open-source development by Aarush Karak." />
+      <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
+        <img src="/images/bg/about.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, var(--overlay-from), var(--overlay-to))' }} />
+        <div className="absolute inset-0 bg-grain opacity-50" />
+      </div>
       <div className="relative z-10 page-container">
         <section className="section-container">
           <ScrollReveal>
@@ -17,7 +22,7 @@ export default function BlogPage() {
               Thoughts on software engineering, spatial computing, AI, and open-source development.
             </p>
           </ScrollReveal>
-          <div className="space-y-5">
+          <div className="space-y-6">
             {posts.map((post, i) => (
               <ScrollReveal key={post.slug} delay={i * 0.06}>
                 <BlogCard post={post} index={i} />

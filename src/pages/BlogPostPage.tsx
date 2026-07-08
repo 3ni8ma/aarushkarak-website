@@ -15,7 +15,7 @@ const markdownComponents: Components = {
     <h3 className="text-lg font-semibold mt-8 mb-3" style={{ color: 'var(--text-primary)' }} {...props}>{children}</h3>
   ),
   p: ({ children, ...props }) => (
-    <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }} {...props}>{children}</p>
+    <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-muted)' }} {...props}>{children}</p>
   ),
   code: ({ className, children, ...props }) => {
     const isInline = !className
@@ -25,23 +25,23 @@ const markdownComponents: Components = {
       )
     }
     return (
-      <pre className="overflow-x-auto rounded p-4 mb-6 text-sm" style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}>
+      <pre className="overflow-x-auto rounded-xl p-4 mb-6 text-sm" style={{ backgroundColor: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)' }}>
         <code className={className} {...props}>{children}</code>
       </pre>
     )
   },
   ul: ({ children, ...props }) => (
-    <ul className="list-disc list-inside space-y-1 mb-4 text-sm" style={{ color: 'var(--text-secondary)' }} {...props}>{children}</ul>
+    <ul className="list-disc list-inside space-y-1 mb-4 text-sm" style={{ color: 'var(--text-muted)' }} {...props}>{children}</ul>
   ),
   ol: ({ children, ...props }) => (
-    <ol className="list-decimal list-inside space-y-1 mb-4 text-sm" style={{ color: 'var(--text-secondary)' }} {...props}>{children}</ol>
+    <ol className="list-decimal list-inside space-y-1 mb-4 text-sm" style={{ color: 'var(--text-muted)' }} {...props}>{children}</ol>
   ),
   li: ({ children, ...props }) => <li {...props}>{children}</li>,
   a: ({ href, children, ...props }) => (
     <a href={href} className="underline underline-offset-2 transition-colors" style={{ color: 'rgb(var(--color-primary))' }} {...props}>{children}</a>
   ),
   blockquote: ({ children, ...props }) => (
-    <blockquote className="border-l-2 pl-4 py-2 mb-4 text-sm italic" style={{ borderColor: 'rgb(var(--color-primary))', color: 'var(--text-secondary)' }} {...props}>{children}</blockquote>
+    <blockquote className="border-l-2 pl-4 py-2 mb-4 text-sm italic" style={{ borderColor: 'rgb(var(--color-primary))', color: 'var(--text-muted)' }} {...props}>{children}</blockquote>
   ),
   table: ({ children, ...props }) => (
     <div className="overflow-x-auto mb-4">
@@ -52,7 +52,7 @@ const markdownComponents: Components = {
     <th className="text-left p-2 font-medium" style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }} {...props}>{children}</th>
   ),
   td: ({ children, ...props }) => (
-    <td className="p-2" style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-secondary)' }} {...props}>{children}</td>
+    <td className="p-2" style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }} {...props}>{children}</td>
   ),
   hr: (props) => <hr className="my-8" style={{ borderColor: 'var(--border-subtle)' }} {...props} />,
 }
@@ -65,10 +65,14 @@ export default function BlogPostPage() {
     return (
       <div className="relative">
         <SEOHead title="Post Not Found" />
+        <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
+          <img src="/images/bg/about.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, var(--overlay-from), var(--overlay-to))' }} />
+        </div>
         <div className="relative z-10 page-container">
           <section className="section-container text-center">
             <h2 className="section-heading">Post Not Found</h2>
-            <p className="mb-8" style={{ color: 'var(--text-secondary)' }}>The article you are looking for does not exist.</p>
+            <p className="mb-8" style={{ color: 'var(--text-muted)' }}>The article you're looking for doesn't exist.</p>
             <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-medium transition-colors" style={{ color: 'rgb(var(--color-primary))' }}>
               <ArrowLeft size={14} /> Back to blog
             </Link>
@@ -83,6 +87,11 @@ export default function BlogPostPage() {
   return (
     <div className="relative">
       <SEOHead path={`/blog/${post.slug}`} title={post.title} description={post.excerpt} />
+      <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
+        <img src={post.image} alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.85))' }} />
+        <div className="absolute inset-0 bg-grain opacity-50" />
+      </div>
       <div className="relative z-10 page-container">
         <article className="section-container">
           <ScrollReveal>
@@ -99,7 +108,7 @@ export default function BlogPostPage() {
               </span>
               <div className="flex flex-wrap gap-2">
                 {post.tags.map(t => (
-                  <span key={t} className="flex items-center gap-1 text-xs px-2.5 py-1 bg-accent-subtle text-accent">
+                  <span key={t} className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(var(--color-primary), 0.08)', color: 'rgb(var(--color-primary))' }}>
                     <Tag size={11} />
                     {t}
                   </span>
@@ -109,7 +118,7 @@ export default function BlogPostPage() {
           </ScrollReveal>
           <div className="max-w-3xl">
             <ScrollReveal delay={0.1}>
-              <div className="prose-custom">
+              <div className="prose-custom" style={{ color: 'var(--text-primary)' }}>
                 <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                   {post.content}
                 </ReactMarkdown>
@@ -121,8 +130,8 @@ export default function BlogPostPage() {
               <h3 className="text-base font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>Related Articles</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 {relatedPosts.map(rp => (
-                  <Link key={rp.slug} to={`/blog/${rp.slug}`} className="card-editorial block">
-                    <h4 className="text-sm font-medium mb-1 text-light">{rp.title}</h4>
+                  <Link key={rp.slug} to={`/blog/${rp.slug}`} className="card-minimal block">
+                    <h4 className="text-sm font-medium mb-1" style={{ color: 'var(--text-primary)' }}>{rp.title}</h4>
                     <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{rp.excerpt}</p>
                   </Link>
                 ))}

@@ -6,7 +6,7 @@ export const helloWorld: BlogPost = {
   date: '2026-06-28',
   excerpt: 'Welcome to my blog. A place where I share thoughts on software engineering, spatial computing, AI, and everything in between.',
   tags: ['Personal', 'Meta'],
-  image: '',
+  image: '/images/bg/home.jpg',
   content: `
 ## Welcome
 

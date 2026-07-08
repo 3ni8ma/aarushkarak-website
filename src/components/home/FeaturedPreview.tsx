@@ -10,13 +10,10 @@ const featured = [
 export default function FeaturedPreview() {
   return (
     <section className="section-container pt-0" aria-label="Featured projects">
-      <div className="flex items-end justify-between mb-10">
-        <div>
-          <h2 className="text-3xl sm:text-4xl font-sans font-light text-light">Featured Projects</h2>
-          <p className="text-sm mt-2" style={{ color: 'var(--text-muted)' }}>Selected work I am proud of</p>
-        </div>
-        <Link to="/projects" className="text-xs tracking-[0.15em] uppercase transition-colors flex items-center gap-1.5 shrink-0" style={{ color: 'rgb(var(--color-primary))' }}>
-          View all <ArrowRight size={12} />
+      <div className="flex items-center justify-between mb-10">
+        <h2 className="text-3xl sm:text-4xl font-sans font-bold text-light">Featured <span className="gradient-text">Projects</span></h2>
+        <Link to="/projects" className="text-sm transition-colors flex items-center gap-1.5" style={{ color: 'rgb(var(--color-primary))' }}>
+          View all <ArrowRight size={14} />
         </Link>
       </div>
       <div className="grid sm:grid-cols-2 gap-6">
@@ -28,13 +25,14 @@ export default function FeaturedPreview() {
               role="link"
               tabIndex={0}
               aria-label={`${p.title} — ${p.desc}`}
-              className="card-editorial cursor-pointer"
+              className="glass rounded-3xl p-8 group relative overflow-hidden hover:bg-white/[0.06] transition-all duration-300 cursor-pointer"
             >
-              <h3 className="text-xl font-sans font-semibold text-light mb-2">{p.title}</h3>
-              <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--text-secondary)' }}>{p.desc}</p>
+              <div className="h-1 w-16 rounded-full mb-5" style={{ backgroundColor: 'rgb(var(--color-primary))' }} />
+              <h3 className="text-xl font-sans font-bold text-light mb-2">{p.title}</h3>
+              <p className="text-sm text-pop-secondary leading-relaxed mb-5">{p.desc}</p>
               <div className="flex flex-wrap gap-1.5">
                 {p.tags.map(t => (
-                  <span key={t} className="text-[11px] px-2.5 py-1 rounded-sm bg-accent-subtle text-accent tracking-wide">
+                  <span key={t} className="text-xs px-3 py-1.5 rounded-full border" style={{ borderColor: 'rgba(var(--color-primary), 0.2)', backgroundColor: 'rgba(var(--color-primary), 0.08)', color: 'rgb(var(--color-primary))' }}>
                     {t}
                   </span>
                 ))}

@@ -6,7 +6,7 @@ export const buildingHelios: BlogPost = {
   date: '2026-06-25',
   excerpt: 'How I built a browser-based AI operating system with hand-gesture navigation, spatial windows, and an LLM-powered assistant — entirely in the browser.',
   tags: ['Three.js', 'MediaPipe', 'AI', 'React'],
-  image: '',
+  image: '/images/bg/projects.jpg',
   content: `
 ## The Idea
 
