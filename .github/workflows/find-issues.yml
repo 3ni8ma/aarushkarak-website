@@ -9,7 +9,9 @@ jobs:
   discover:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v7
+      - name: Find open issues
+        id: find
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.PAT_TOKEN }}
           script: |
@@ -25,9 +27,7 @@ jobs:
             let allIssues = [];
             for (const q of queries) {
               const result = await github.rest.search.issuesAndPullRequests({
-                q,
-                sort: 'updated',
-                per_page: 5,
+                q, sort: 'updated', per_page: 5,
               });
               allIssues.push(...result.data.items);
             }
@@ -40,25 +40,52 @@ jobs:
                   url: issue.html_url,
                   repo: issue.repository_url.replace('https://api.github.com/repos/', ''),
                   labels: issue.labels.map(l => l.name).join(', '),
-                  created: issue.created_at,
                 });
               }
             }
 
             const issues = [...unique.values()].slice(0, 15);
+            core.setOutput('count', String(issues.length));
+            core.setOutput('issues', JSON.stringify(issues));
 
-            let body = `# Daily Issue Discovery — ${new Date().toISOString().split('T')[0]}\n\n`;
-            body += `Found **${issues.length}** open issues matching your stack.\n\n`;
-            body += `| # | Repo | Issue | Labels |\n`;
-            body += `|---|------|-------|--------|\n`;
-            issues.forEach((issue, i) => {
-              body += `| ${i+1} | ${issue.repo} | [${issue.title}](${issue.url}) | ${issue.labels} |\n`;
-            });
+      - name: Send report via email
+        env:
+          GMAIL_PASS: ${{ secrets.GMAIL_APP_PASSWORD }}
+          COUNT: ${{ steps.find.outputs.count }}
+          ISSUES_JSON: ${{ steps.find.outputs.issues }}
+        run: |
+          python3 << 'PYEOF'
+          import smtplib, json, os
+          from email.message import EmailMessage
+          from datetime import datetime, timezone
 
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `Daily Issue Report — ${new Date().toISOString().split('T')[0]}`,
-              body,
-              labels: ['automated-report'],
-            });
+          msg = EmailMessage()
+          msg['Subject'] = f"Daily Issue Discovery Report — {datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
+          msg['From'] = 'worldshaans@gmail.com'
+          msg['To'] = 'worldshaans@gmail.com'
+
+          issues = json.loads(os.environ.get('ISSUES_JSON', '[]'))
+          lines = [
+              f"Daily Issue Discovery Report",
+              f"{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
+              "",
+              f"Found {len(issues)} open issues matching your stack.",
+              "",
+          ]
+          for i, issue in enumerate(issues, 1):
+              lines.append(f"{i}. [{issue['repo']}] {issue['title']}")
+              lines.append(f"   URL: {issue['url']}")
+              lines.append(f"   Labels: {issue['labels']}")
+              lines.append("")
+
+          msg.set_content('\n'.join(lines))
+
+          password = os.environ.get('GMAIL_PASS', '')
+          if not password:
+              print("No GMAIL_PASS secret set — skipping email")
+          else:
+              with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+                  server.login('worldshaans@gmail.com', password)
+                  server.send_message(msg)
+              print(f"Email sent with {len(issues)} issues")
+          PYEOF
