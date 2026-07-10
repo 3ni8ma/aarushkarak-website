@@ -97,3 +97,5 @@ public/           # Static files (images, favicon, resume.pdf)
 MIT
 
 <!-- ach: 2026-06-26 15:59:52 -->
+
+<!-- ach: 2026-07-10 12:00:16 -->
