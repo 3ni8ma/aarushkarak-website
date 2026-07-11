@@ -27,7 +27,11 @@ export default function TerminalOverlay() {
       setHistory([])
     }
     if (result.navigate) {
-      navigate(result.navigate)
+      if (result.navigate.startsWith('http')) {
+        window.open(result.navigate, '_blank', 'noopener,noreferrer')
+      } else {
+        navigate(result.navigate)
+      }
       setOpen(false)
     }
     if (result.theme && themes.find(t => t.id === result.theme)) {
