@@ -1,6 +1,6 @@
-// 2026-07-13 17:00:26
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { animate } from 'animejs';
 
 interface AnimatedCounterProps {
   end: number;
@@ -11,38 +11,34 @@ interface AnimatedCounterProps {
 }
 
 export function AnimatedCounter({ end, suffix = '', duration = 2000, label, sub }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0);
+  const spanRef = useRef<HTMLSpanElement>(null);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
   const startedRef = useRef(false);
 
   useEffect(() => {
-    if (!inView || startedRef.current) return;
+    if (!inView || startedRef.current || !spanRef.current) return;
     startedRef.current = true;
 
-    const startTime = performance.now();
-
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(eased * end);
-
-      setCount(current);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setCount(end);
+    const current = spanRef.current;
+    const anim = animate(
+      { val: 0 } as Record<string, number>,
+      {
+        val: end,
+        duration,
+        ease: 'outCubic',
+        onUpdate: (a) => {
+          const v = Math.floor((a.targets[0] as Record<string, number>).val)
+          current.textContent = `${v}${suffix}`
+        },
       }
-    };
+    );
 
-    requestAnimationFrame(animate);
-  }, [inView, end, duration]);
+    return () => { anim.pause() }
+  }, [inView, end, duration, suffix]);
 
   return (
     <div ref={ref} className="text-center">
-      <span className="text-3xl font-bold text-white">{count}{suffix}</span>
+      <span ref={spanRef} className="text-3xl font-bold text-white">0{suffix}</span>
       {label && <p className="text-sm text-gray-400 mt-1">{label}</p>}
       {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
     </div>

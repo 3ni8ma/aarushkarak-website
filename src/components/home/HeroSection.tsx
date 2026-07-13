@@ -1,7 +1,9 @@
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowDown, MapPin } from 'lucide-react'
 import { useTheme } from '../../contexts/ThemeContext'
+import { animate, stagger, splitText } from 'animejs'
 
 const sparkles = Array.from({ length: 8 }, (_, i) => ({
   id: i,
@@ -11,6 +13,22 @@ const sparkles = Array.from({ length: 8 }, (_, i) => ({
 
 export default function HeroSection() {
   const { revealStarted } = useTheme()
+  const nameRef = useRef<HTMLHeadingElement>(null)
+
+  useEffect(() => {
+    if (!revealStarted || !nameRef.current) return
+    const el = nameRef.current
+    const split = splitText(el, { chars: { class: 'anime-char' } })
+    animate(split.chars, {
+      opacity: [0, 1],
+      translateY: [40, 0],
+      rotateX: [-90, 0],
+      duration: 800,
+      delay: stagger(35, { start: 200 }),
+      ease: 'outExpo',
+    })
+    return () => { split.revert() }
+  }, [revealStarted])
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-label="Hero introduction">
@@ -31,16 +49,15 @@ export default function HeroSection() {
               </span>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={revealStarted ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <h1 className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-sans font-bold text-light leading-[1.05] mb-6 tracking-tight">
+            <div>
+              <h1
+                ref={nameRef}
+                className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-sans font-bold text-light leading-[1.05] mb-6 tracking-tight"
+              >
                 Aarush <br className="sm:hidden" />
                 <span className="gradient-text-shimmer">Karak</span>
               </h1>
-            </motion.div>
+            </div>
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
