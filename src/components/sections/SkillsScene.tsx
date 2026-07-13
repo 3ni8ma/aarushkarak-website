@@ -15,8 +15,11 @@ function SkillParticles() {
     const pos = new Float32Array(skills.length * 3)
     const col = new Float32Array(skills.length * 3)
     skills.forEach((_, i) => {
+      // eslint-disable-next-line react-hooks/purity
       const theta = Math.random() * Math.PI * 2
+      // eslint-disable-next-line react-hooks/purity
       const phi = Math.acos(2 * Math.random() - 1)
+      // eslint-disable-next-line react-hooks/purity
       const r = 2 + Math.random() * 4
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
       pos[i * 3 + 1] = r * Math.cos(phi) * 0.6

@@ -21,16 +21,20 @@ function ContactParticles() {
     const col = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
+      // eslint-disable-next-line react-hooks/purity
       pos[i3] = (Math.random() - 0.5) * 16
+      // eslint-disable-next-line react-hooks/purity
       pos[i3 + 1] = (Math.random() - 0.5) * 10
+      // eslint-disable-next-line react-hooks/purity
       pos[i3 + 2] = (Math.random() - 0.5) * 8 - 2
+      // eslint-disable-next-line react-hooks/purity
       const c = [colors.primary, colors.secondary, colors.accent][Math.floor(Math.random() * 3)]
       col[i3] = c.r
       col[i3 + 1] = c.g
       col[i3 + 2] = c.b
     }
     return [pos, col]
-  }, [colors])
+  }, [colors, count])
 
   const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry()

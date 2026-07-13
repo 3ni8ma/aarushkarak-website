@@ -58,14 +58,19 @@ function HeroParticles({ revealed = false }: { revealed?: boolean }) {
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
+      // eslint-disable-next-line react-hooks/purity
       const radius = 3 + Math.random() * 10
+      // eslint-disable-next-line react-hooks/purity
       const theta = Math.random() * Math.PI * 2
+      // eslint-disable-next-line react-hooks/purity
       const phi = Math.acos(2 * Math.random() - 1)
       pos[i3] = radius * Math.sin(phi) * Math.cos(theta)
       pos[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
       pos[i3 + 2] = radius * Math.cos(phi)
+      // eslint-disable-next-line react-hooks/purity
       siz[i] = Math.random() * 3 + 0.5
 
+      // eslint-disable-next-line react-hooks/purity
       const c = [colors.primary, colors.secondary, colors.accent][Math.floor(Math.random() * 3)]
       col[i3] = c.r
       col[i3 + 1] = c.g

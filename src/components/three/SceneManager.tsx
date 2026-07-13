@@ -5,7 +5,7 @@ import { AdaptiveDpr } from '@react-three/drei'
 const isMobile = typeof window !== 'undefined' && (
   'ontouchstart' in window ||
   navigator.maxTouchPoints > 0 ||
-  (navigator as any).hardwareConcurrency <= 4 ||
+  (navigator as Navigator & { hardwareConcurrency?: number }).hardwareConcurrency <= 4 ||
   window.innerWidth < 768
 )
 

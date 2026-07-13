@@ -89,8 +89,10 @@ export default function LoadingScreen() {
           setTypewriterText(typewriterText.slice(0, -1))
         }, 20 + Math.random() * 15)
       } else {
-        setTypewriterIndex(i => (i + 1) % typewriterWords.length)
-        setTypewriterPhase('typing')
+        timeout = setTimeout(() => {
+          setTypewriterIndex(i => (i + 1) % typewriterWords.length)
+          setTypewriterPhase('typing')
+        }, 0)
       }
     }
 

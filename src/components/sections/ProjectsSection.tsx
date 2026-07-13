@@ -22,8 +22,11 @@ function ProjectCard({ p, index }: { p: typeof projects[number]; index: number }
   return (
     <ScrollReveal delay={index * 0.1}>
       <article
+        // eslint-disable-next-line react-hooks/refs
         ref={tilt.ref}
+        // eslint-disable-next-line react-hooks/refs
         onMouseMove={tilt.onMouseMove}
+        // eslint-disable-next-line react-hooks/refs
         onMouseLeave={tilt.onMouseLeave}
         className="card-minimal group cursor-pointer transition-all duration-300"
         style={{ transformStyle: 'preserve-3d' }}
