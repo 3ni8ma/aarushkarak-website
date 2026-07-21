@@ -9,30 +9,23 @@ export default function BlogPage() {
   return (
     <div className="relative">
       <SEOHead path="/blog" title="Blog" description="Articles and thoughts on software engineering, spatial computing, AI, and open-source development by Aarush Karak." />
-      <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
-        <img src="/images/bg/about.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, var(--overlay-from), var(--overlay-to))' }} />
-        <div className="absolute inset-0 bg-grain opacity-50" />
-      </div>
-      <div className="relative z-10 page-container">
-        <section className="section-container">
-          <ScrollReveal>
-            <h2 className="section-heading">Blog</h2>
-            <p className="max-w-lg mb-12 text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-              Thoughts on software engineering, spatial computing, AI, and open-source development.
-            </p>
-          </ScrollReveal>
-          <div className="space-y-6">
-            {posts.map((post, i) => (
-              <ScrollReveal key={post.slug} delay={i * 0.06}>
-                <BlogCard post={post} index={i} />
-              </ScrollReveal>
-            ))}
-          </div>
-          {posts.length === 0 && (
-            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No articles yet. Check back soon!</p>
-          )}
-        </section>
+      <div className="relative z-10 w-full px-6 lg:px-10 section-pad">
+        <ScrollReveal>
+          <span className="section-label">Blog</span>
+          <p className="text-sm leading-relaxed mb-12 max-w-lg" style={{ color: 'var(--text-muted)' }}>
+            Thoughts on software engineering, spatial computing, AI, and open-source development.
+          </p>
+        </ScrollReveal>
+        <div className="space-y-5 max-w-4xl">
+          {posts.map((post, i) => (
+            <ScrollReveal key={post.slug} delay={i * 0.06}>
+              <BlogCard post={post} index={i} />
+            </ScrollReveal>
+          ))}
+        </div>
+        {posts.length === 0 && (
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No articles yet. Check back soon!</p>
+        )}
       </div>
     </div>
   )

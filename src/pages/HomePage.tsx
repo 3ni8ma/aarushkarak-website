@@ -19,59 +19,58 @@ export default function HomePage() {
     <div className="relative">
       <SEOHead path="/" />
       <SceneLoader load={() => import('../components/home/HeroScene')} />
-      <div className="fixed inset-0 z-[1] overflow-hidden pointer-events-none">
-        <img src="/images/bg/home.jpg" alt="" className="w-full h-full object-cover animate-ken-burns" loading="lazy" aria-hidden="true" />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, var(--overlay-from), var(--overlay-to))' }} />
-        <div className="absolute inset-0 bg-grain" />
-      </div>
       <div className="relative z-10">
         <HeroSection />
+
+        <div className="divider" />
+
         <QuickStats />
 
-        <section className="section-container" aria-label="What I do">
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(var(--color-primary), 0.03) 0%, transparent 60%)' }} aria-hidden="true" />
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-            <div className="lg:w-1/3 shrink-0">
-              <ScrollReveal>
-                <h2 className="section-heading mb-4">What I Do</h2>
-                <p className="leading-relaxed text-sm max-w-xs" style={{ color: 'var(--text-muted)' }}>
-                  Technologies and disciplines I work with daily to build impactful digital experiences.
-                </p>
-              </ScrollReveal>
-            </div>
-            <div className="flex-1 space-y-4">
-              {items.map((item, i) => {
-                const Icon = item.icon
-                return (
-                  <ScrollReveal key={item.id} delay={i * 0.08}>
-                    <div className="card-minimal">
-                      <div className="flex items-center gap-4 mb-3">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(var(--color-primary), 0.1)' }}>
-                          <Icon size={18} style={{ color: 'rgb(var(--color-primary))' }} />
+        <div className="divider" />
+
+        <section className="w-full px-6 lg:px-10 section-pad" aria-label="What I do">
+          <div className="max-w-6xl">
+            <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+              <div className="lg:w-1/3 shrink-0">
+                <ScrollReveal>
+                  <span className="section-label">What I Do</span>
+                  <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                    Technologies and disciplines I work with daily to build impactful digital experiences.
+                  </p>
+                </ScrollReveal>
+              </div>
+              <div className="flex-1 space-y-4">
+                {items.map((item, i) => {
+                  const Icon = item.icon
+                  return (
+                    <ScrollReveal key={item.id} delay={i * 0.08}>
+                      <div className="card">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#D5F74C', color: '#000' }}>
+                            <Icon size={18} />
+                          </div>
+                          <h3 className="heading-md !text-base">{item.title}</h3>
                         </div>
-                        <h3 className="text-base font-medium text-light">{item.title}</h3>
+                        <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-muted)' }}>{item.desc}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {item.tags.map(t => (
+                            <span key={t} className="tag">{t}</span>
+                          ))}
+                        </div>
                       </div>
-                      <p className="text-sm text-light/85 leading-relaxed mb-3">{item.desc}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {item.tags.map(t => (
-                          <span key={t} className="text-xs px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(var(--color-primary), 0.08)', color: 'rgb(var(--color-primary))' }}>
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </ScrollReveal>
-                )
-              })}
+                    </ScrollReveal>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </section>
 
         <FeaturedPreview />
 
-        <section className="section-container">
+        <section className="w-full px-6 lg:px-10 section-pad-sm">
           <div className="flex justify-center">
-            <Link to="/about" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold transition-all border" style={{ borderColor: 'rgba(var(--color-primary), 0.3)', color: 'rgb(var(--color-primary))' }}>
+            <Link to="/about" className="btn-outline">
               More about me <ArrowRight size={14} />
             </Link>
           </div>

@@ -38,74 +38,62 @@ export default function WhatIDo() {
   const [active, setActive] = useState<string | null>(null)
 
   return (
-    <section className="section-container" aria-label="What I do">
-      <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-        <div className="lg:w-1/3 shrink-0">
-          <ScrollReveal>
-            <h2 className="section-heading mb-4">What I Do</h2>
-            <p className="text-muted-light leading-relaxed text-sm max-w-xs">
-              Technologies and disciplines I work with daily to build impactful digital experiences.
-            </p>
-          </ScrollReveal>
-        </div>
-        <div className="flex-1 space-y-4">
-          {items.map((item, i) => {
-            const Icon = item.icon
-            const isOpen = active === item.id
-            return (
-              <ScrollReveal key={item.id} delay={i * 0.08}>
-                <div
-                  onClick={() => setActive(isOpen ? null : item.id)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(isOpen ? null : item.id) }}}
-                  role="button"
-                  tabIndex={0}
-                  aria-expanded={isOpen}
-                  className="card-minimal cursor-pointer group"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(var(--color-primary), 0.1)' }}>
-                        <Icon size={18} style={{ color: 'rgb(var(--color-primary))' }} />
+    <section className="w-full px-6 lg:px-10 section-pad" aria-label="What I do">
+      <div className="max-w-6xl">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+          <div className="lg:w-1/3 shrink-0">
+            <ScrollReveal>
+              <span className="section-label">What I Do</span>
+              <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                Technologies and disciplines I work with daily to build impactful digital experiences.
+              </p>
+            </ScrollReveal>
+          </div>
+          <div className="flex-1 space-y-3">
+            {items.map((item, i) => {
+              const Icon = item.icon
+              const isOpen = active === item.id
+              return (
+                <ScrollReveal key={item.id} delay={i * 0.08}>
+                  <div
+                    onClick={() => setActive(isOpen ? null : item.id)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(isOpen ? null : item.id) }}}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={isOpen}
+                    className="card cursor-pointer group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#D5F74C', color: '#000' }}>
+                          <Icon size={18} />
+                        </div>
+                        <h3 className="heading-md !text-base">{item.title}</h3>
                       </div>
-                      <div>
-                        <h3 className="text-base font-medium text-light">{item.title}</h3>
-                      </div>
+                      <motion.div animate={{ rotate: isOpen ? 90 : 0 }} transition={{ duration: 0.2 }}>
+                        <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+                      </motion.div>
                     </div>
                     <motion.div
-                      animate={{ rotate: isOpen ? 90 : 0 }}
-                      transition={{ duration: 0.2 }}
+                      initial={false}
+                      animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                      className="overflow-hidden"
                     >
-                      <ChevronRight size={18} className="text-muted" />
+                      <div className="pt-4 pb-2">
+                        <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-muted)' }}>{item.desc}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {item.tags.map(t => (
+                            <span key={t} className="tag">{t}</span>
+                          ))}
+                        </div>
+                      </div>
                     </motion.div>
                   </div>
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      height: isOpen ? 'auto' : 0,
-                      opacity: isOpen ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="overflow-hidden"
-                  >
-                    <div className="pt-4 pb-2">
-                      <p className="text-sm text-light/85 leading-relaxed mb-4">{item.desc}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {item.tags.map(t => (
-                          <span
-                            key={t}
-                            className="text-xs px-3 py-1 rounded-full"
-                            style={{ backgroundColor: 'rgba(var(--color-primary), 0.08)', color: 'rgb(var(--color-primary))' }}
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-              </ScrollReveal>
-            )
-          })}
+                </ScrollReveal>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>

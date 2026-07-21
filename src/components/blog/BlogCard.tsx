@@ -11,13 +11,13 @@ export default function BlogCard({ post, index }: BlogCardProps) {
   return (
     <Link
       to={`/blog/${post.slug}`}
-      className="card-minimal group block"
+      className="card block group !p-5"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="flex flex-col sm:flex-row gap-6">
-        <div className="sm:w-48 shrink-0 overflow-hidden rounded-xl">
+      <div className="flex flex-col sm:flex-row gap-5">
+        <div className="sm:w-40 shrink-0 overflow-hidden rounded-xl">
           <div
-            className="h-32 sm:h-full min-h-[128px] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+            className="h-28 sm:h-full min-h-[112px] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
             style={{ backgroundImage: `url(${post.image})` }}
           />
         </div>
@@ -29,24 +29,18 @@ export default function BlogCard({ post, index }: BlogCardProps) {
             </span>
             <div className="flex flex-wrap gap-1.5">
               {post.tags.map(t => (
-                <span
-                  key={t}
-                  className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full"
-                  style={{ backgroundColor: 'rgba(var(--color-primary), 0.08)', color: 'rgb(var(--color-primary))' }}
-                >
+                <span key={t} className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full" style={{ background: 'var(--bg-card-hover)', color: 'var(--text-muted)' }}>
                   <Tag size={10} />
                   {t}
                 </span>
               ))}
             </div>
           </div>
-          <h3 className="text-lg font-semibold mb-2 transition-colors" style={{ color: 'var(--text-primary)' }}>
-            {post.title}
-          </h3>
+          <h3 className="heading-md !text-base mb-2">{post.title}</h3>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
             {post.excerpt}
           </p>
-          <div className="mt-3 text-xs font-medium transition-colors" style={{ color: 'rgb(var(--color-primary))' }}>
+          <div className="mt-3 text-xs font-medium transition-colors" style={{ color: '#D5F74C' }}>
             Read more →
           </div>
         </div>

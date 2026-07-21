@@ -28,15 +28,17 @@ export default function ScrollTopButton() {
     <button
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      className={`scroll-top-btn ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
-      style={{ transition: 'opacity 0.3s, transform 0.3s' }}
+      className={`fixed bottom-8 right-8 w-11 h-11 rounded-full flex items-center justify-center z-40 transition-all duration-300 ${
+        visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+      }`}
+      style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)' }}
     >
       <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 44 44" aria-hidden="true">
-        <circle cx="22" cy="22" r={r} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
+        <circle cx="22" cy="22" r={r} fill="none" stroke="var(--border-subtle)" strokeWidth="3" />
         <circle
           cx="22" cy="22" r={r}
           fill="none"
-          stroke="rgb(var(--color-primary))"
+          stroke="#D5F74C"
           strokeWidth="3"
           strokeLinecap="round"
           strokeDasharray={circumference}
@@ -44,7 +46,7 @@ export default function ScrollTopButton() {
           style={{ transition: 'stroke-dashoffset 0.1s ease' }}
         />
       </svg>
-      <ArrowUp size={16} className="relative z-10" />
+      <ArrowUp size={16} className="relative z-10" style={{ color: 'var(--text-muted)' }} />
     </button>
   )
 }

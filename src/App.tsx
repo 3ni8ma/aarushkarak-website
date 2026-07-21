@@ -7,9 +7,7 @@ import Footer from './components/layout/Footer'
 import SkipLink from './components/layout/SkipLink'
 import ScrollTopButton from './components/layout/ScrollTopButton'
 import LoadingScreen from './components/loading/LoadingScreen'
-import CustomCursor from './components/cursor/CustomCursor'
 import SmoothScroll from './components/layout/SmoothScroll'
-import TerminalOverlay from './components/terminal/TerminalOverlay'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
@@ -24,11 +22,10 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 function PageTransition({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.97, rotateX: 3 }}
-      animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-      exit={{ opacity: 0, y: -20, scale: 0.98, rotateX: -2 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
     >
       {children}
     </motion.div>
@@ -38,7 +35,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 function Fallback() {
   return (
     <div className="flex items-center justify-center min-h-[60vh]" role="status" aria-label="Loading page">
-      <div className="w-8 h-8 border-2 rounded-full border-t-transparent animate-spin" style={{ borderColor: 'rgba(var(--color-primary), 0.3)', borderTopColor: 'transparent' }} />
+      <div className="w-6 h-6 rounded-full border-2 border-stone/30 border-t-accent animate-spin" />
       <span className="sr-only">Loading...</span>
     </div>
   )
@@ -50,12 +47,12 @@ function App() {
   return (
     <HelmetProvider>
       <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+        <div className="grain-overlay" aria-hidden="true" />
         <LoadingScreen />
         <SkipLink />
-        <CustomCursor />
         <SmoothScroll>
           <Navbar />
-          <main id="main-content">
+          <main id="main-content" className="pt-0">
             <Suspense fallback={<Fallback />}>
               <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
@@ -75,7 +72,6 @@ function App() {
           <Footer />
         </SmoothScroll>
         <ScrollTopButton />
-        <TerminalOverlay />
       </div>
     </HelmetProvider>
   )
