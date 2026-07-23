@@ -9,9 +9,9 @@ export default function BlogPage() {
   return (
     <div className="relative">
       <SEOHead path="/blog" title="Blog" description="Articles and thoughts on software engineering, spatial computing, AI, and open-source development by Aarush Karak." />
-      <div className="relative z-10 w-full px-6 lg:px-10 section-pad">
+      <div className="relative z-10 w-full px-6 lg:px-10 page-container">
         <ScrollReveal>
-          <span className="section-label">Blog</span>
+          <span className="tag">Blog</span>
           <p className="text-sm leading-relaxed mb-12 max-w-lg" style={{ color: 'var(--text-muted)' }}>
             Thoughts on software engineering, spatial computing, AI, and open-source development.
           </p>

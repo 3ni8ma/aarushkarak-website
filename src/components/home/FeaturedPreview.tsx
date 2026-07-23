@@ -22,12 +22,12 @@ function FeaturedCard({ p, index }: { p: typeof featured[number]; index: number 
         role="link"
         tabIndex={0}
         aria-label={`${p.title} — ${p.desc}`}
-        className="card group cursor-pointer"
+        className="card-minimal group cursor-pointer"
         style={{ transformStyle: 'preserve-3d' }}
       >
         <div style={{ transform: 'translateZ(20px)' }}>
-          <div className="w-10 h-1 rounded-full mb-6" style={{ background: '#D5F74C' }} />
-          <h3 className="heading-md mb-3">{p.title}</h3>
+          <div className="w-10 h-1 rounded-full mb-6" style={{ background: 'rgb(var(--color-primary))' }} />
+          <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>{p.title}</h3>
           <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>{p.desc}</p>
           <div className="flex flex-wrap gap-1.5">
             {p.tags.map(t => (
@@ -42,10 +42,10 @@ function FeaturedCard({ p, index }: { p: typeof featured[number]; index: number 
 
 export default function FeaturedPreview() {
   return (
-    <section className="w-full px-6 lg:px-10 section-pad" aria-label="Featured projects">
+    <section className="w-full px-6 lg:px-10 page-container" aria-label="Featured projects">
       <div className="flex items-center justify-between mb-12">
-        <h2 className="heading-lg">Featured Projects</h2>
-        <Link to="/projects" className="btn-outline !py-2 !px-5 text-xs">
+        <h2 className="section-heading !mb-0">Featured Projects</h2>
+        <Link to="/projects" className="btn-primary !py-2 !px-5 text-xs" style={{ background: 'transparent', borderColor: 'var(--border-subtle)' }}>
           View all <ArrowRight size={13} />
         </Link>
       </div>

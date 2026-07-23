@@ -7,7 +7,7 @@ export default function ContactPage() {
     <div className="relative">
       <SEOHead path="/contact" title="Contact" description="Get in touch with Aarush Karak for projects, collaborations, or opportunities." />
       <SceneLoader load={() => import('../components/sections/ContactScene')} />
-      <div className="relative z-10 section-pad">
+      <div className="relative z-10 page-container">
         <ContactSection />
       </div>
     </div>

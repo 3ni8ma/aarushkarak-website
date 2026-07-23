@@ -10,8 +10,8 @@ export interface Theme {
 
 export const themes: Theme[] = [
   {
-    id: 'editorial',
-    label: 'Editorial',
-    colors: { primary: '0 0 0', secondary: '136 136 136', accent: '213 247 76' },
+    id: 'default',
+    label: 'Default',
+    colors: { primary: '194 164 255', secondary: '168 124 255', accent: '34 211 238' },
   },
 ]

@@ -11,7 +11,7 @@ export default function BlogCard({ post, index }: BlogCardProps) {
   return (
     <Link
       to={`/blog/${post.slug}`}
-      className="card block group !p-5"
+      className="card-minimal block group !p-5"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
       <div className="flex flex-col sm:flex-row gap-5">
@@ -36,11 +36,11 @@ export default function BlogCard({ post, index }: BlogCardProps) {
               ))}
             </div>
           </div>
-          <h3 className="heading-md !text-base mb-2">{post.title}</h3>
+          <h3 className="text-pop-primary text-base font-semibold mb-2">{post.title}</h3>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
             {post.excerpt}
           </p>
-          <div className="mt-3 text-xs font-medium transition-colors" style={{ color: '#D5F74C' }}>
+          <div className="mt-3 text-xs font-medium transition-colors" style={{ color: 'rgb(var(--color-primary))' }}>
             Read more →
           </div>
         </div>

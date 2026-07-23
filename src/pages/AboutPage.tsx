@@ -9,7 +9,7 @@ export default function AboutPage() {
       <SEOHead path="/about" title="About" description="Learn more about Aarush Karak — full-stack developer, spatial computing engineer, and founder of The Coder Bros." />
       <SceneLoader load={() => import('../components/sections/AboutScene')} />
       <div className="relative z-10">
-        <div className="section-pad">
+        <div className="page-container">
           <AboutSection />
           <div className="divider my-0" />
           <WhatIDo />

@@ -25,7 +25,7 @@ export default function ExperienceSection() {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           <div className="lg:w-1/3 shrink-0">
             <ScrollReveal>
-              <span className="section-label">Experience</span>
+              <span className="tag">Experience</span>
               <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                 My professional journey so far.
               </p>
@@ -36,7 +36,7 @@ export default function ExperienceSection() {
               const logo = companyLogos[exp.company]
               return (
                 <ScrollReveal key={exp.company + exp.role} delay={i * 0.06}>
-                  <div className="card flex items-start gap-5">
+                  <div className="card-minimal flex items-start gap-5">
                     {logo && (
                       <img
                         src={logo}
@@ -48,10 +48,10 @@ export default function ExperienceSection() {
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
-                        <h3 className="heading-md !text-base">{exp.role}</h3>
-                        <span className="text-xs font-medium" style={{ color: '#D5F74C' }}>{exp.company}</span>
+                        <h3 className="text-pop-primary text-base font-semibold">{exp.role}</h3>
+                        <span className="text-xs font-medium" style={{ color: 'rgb(var(--color-primary))' }}>{exp.company}</span>
                       </div>
-                      <p className="label-sm !text-[10px] mb-2">{exp.period}</p>
+                      <p className="text-[10px] uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>{exp.period}</p>
                       <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>{exp.desc}</p>
                     </div>
                   </div>

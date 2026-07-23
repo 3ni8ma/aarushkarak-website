@@ -38,12 +38,12 @@ export default function WhatIDo() {
   const [active, setActive] = useState<string | null>(null)
 
   return (
-    <section className="w-full px-6 lg:px-10 section-pad" aria-label="What I do">
+    <section className="w-full px-6 lg:px-10 page-container" aria-label="What I do">
       <div className="max-w-6xl">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           <div className="lg:w-1/3 shrink-0">
             <ScrollReveal>
-              <span className="section-label">What I Do</span>
+              <span className="tag">What I Do</span>
               <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                 Technologies and disciplines I work with daily to build impactful digital experiences.
               </p>
@@ -61,14 +61,14 @@ export default function WhatIDo() {
                     role="button"
                     tabIndex={0}
                     aria-expanded={isOpen}
-                    className="card cursor-pointer group"
+                    className="card-minimal cursor-pointer group"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#D5F74C', color: '#000' }}>
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'rgb(var(--color-primary))', color: '#000' }}>
                           <Icon size={18} />
                         </div>
-                        <h3 className="heading-md !text-base">{item.title}</h3>
+                        <h3 className="text-pop-primary text-base font-semibold">{item.title}</h3>
                       </div>
                       <motion.div animate={{ rotate: isOpen ? 90 : 0 }} transition={{ duration: 0.2 }}>
                         <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />

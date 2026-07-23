@@ -32,18 +32,19 @@ export default function HeroSection() {
             animate={revealStarted ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1, duration: 0.5 }}
           >
-            <span className="label-sm block mb-6">
-              Greater Toronto Area, Canada
+            <span className="tag block mb-6">
+               Greater Toronto Area, Canada
             </span>
           </motion.div>
 
           <h1
             ref={nameRef}
-            className="heading-xl mb-8"
+            className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.05] mb-8"
+            style={{ color: 'var(--text-primary)' }}
           >
             Aarush
             <br />
-            <span className="text-accent-theme">Karak</span>
+            <span className="text-pop-primary">Karak</span>
           </h1>
 
           <motion.p
@@ -64,12 +65,12 @@ export default function HeroSection() {
             transition={{ delay: 0.6, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
             className="flex flex-wrap items-center gap-4"
           >
-            <Link to="/projects" className="btn-accent">
-              View my work
-              <ArrowDown size={14} style={{ transform: 'rotate(-90deg)' }} />
+            <Link to="/projects" className="btn-primary">
+               View my work
+               <ArrowDown size={14} style={{ transform: 'rotate(-90deg)' }} />
             </Link>
-            <Link to="/contact" className="btn-outline">
-              Get in touch
+            <Link to="/contact" className="btn-primary" style={{ background: 'transparent', borderColor: 'var(--border-subtle)', color: 'var(--text-muted)' }}>
+               Get in touch
             </Link>
           </motion.div>
 

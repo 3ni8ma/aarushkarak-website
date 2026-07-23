@@ -10,12 +10,12 @@ const info = [
 
 export default function AboutSection() {
   return (
-    <section id="about" className="w-full px-6 lg:px-10 section-pad relative" aria-label="About me">
+    <section id="about" className="w-full px-6 lg:px-10 page-container relative" aria-label="About me">
       <div className="max-w-6xl">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           <div className="lg:w-1/3 shrink-0">
             <ScrollReveal>
-              <span className="section-label">About</span>
+              <span className="tag">About</span>
               <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                 A quick overview of who I am and what drives my work.
               </p>
@@ -23,7 +23,7 @@ export default function AboutSection() {
           </div>
           <div className="flex-1 space-y-6">
             <ScrollReveal>
-              <div className="card space-y-5">
+              <div className="card-minimal space-y-5">
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                   I'm a Sophomore at John Fraser Secondary School and the Founder of{' '}
                   <strong style={{ color: 'var(--text-primary)' }}>The Coder Bros</strong>, a student-led tech initiative.
@@ -49,11 +49,11 @@ export default function AboutSection() {
                 const Icon = item.icon
                 return (
                   <ScrollReveal key={item.label} delay={i * 0.06}>
-                    <div className="card !p-5 text-center">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2" style={{ background: '#D5F74C', color: '#000' }}>
+                    <div className="card-minimal !p-5 text-center">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2" style={{ background: 'rgb(var(--color-primary))', color: '#000' }}>
                         <Icon size={14} />
                       </div>
-                      <p className="label-sm !text-[10px] mb-1">{item.label}</p>
+                      <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>{item.label}</p>
                       <p className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>{item.value}</p>
                     </div>
                   </ScrollReveal>

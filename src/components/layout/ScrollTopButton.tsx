@@ -38,7 +38,7 @@ export default function ScrollTopButton() {
         <circle
           cx="22" cy="22" r={r}
           fill="none"
-          stroke="#D5F74C"
+          stroke="rgb(var(--color-primary))"
           strokeWidth="3"
           strokeLinecap="round"
           strokeDasharray={circumference}

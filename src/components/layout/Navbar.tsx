@@ -41,10 +41,10 @@ export default function Navbar() {
       <div className="w-full px-6 lg:px-10">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link to="/" className="group flex items-center gap-1" aria-label="Home page">
-            <span className="font-heading text-xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-              AK
+            <span className="font-sans text-xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+               AK
             </span>
-            <span className="font-heading text-xl font-bold" style={{ color: '#D5F74C' }}>.</span>
+            <span className="font-sans text-xl font-bold" style={{ color: 'rgb(var(--color-primary))' }}>.</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
@@ -63,7 +63,7 @@ export default function Navbar() {
                   <motion.div
                     layoutId="nav-indicator"
                     className="absolute -bottom-1 left-0 right-0 h-[2px]"
-                    style={{ backgroundColor: '#D5F74C' }}
+                    style={{ backgroundColor: 'rgb(var(--color-primary))' }}
                   />
                 )}
               </Link>
@@ -72,7 +72,7 @@ export default function Navbar() {
               href="/resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-outline !py-2 !px-5 text-xs"
+              className="btn-primary !py-2 !px-5 text-xs"
               aria-label="Resume (opens in new tab)"
             >
               <FileText size={13} />

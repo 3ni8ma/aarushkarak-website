@@ -18,7 +18,7 @@ function ProjectCard({ p, index }: { p: typeof projects[number]; index: number }
         ref={tilt.ref}
         onMouseMove={tilt.onMouseMove}
         onMouseLeave={tilt.onMouseLeave}
-        className="card group cursor-pointer transition-all duration-300"
+        className="card-minimal group cursor-pointer"
         style={{ transformStyle: 'preserve-3d' }}
         onClick={() => window.open(p.link, '_blank', 'noopener,noreferrer')}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(p.link, '_blank', 'noopener,noreferrer') }}}
@@ -28,7 +28,7 @@ function ProjectCard({ p, index }: { p: typeof projects[number]; index: number }
       >
         <div style={{ transform: 'translateZ(20px)' }}>
           <div className="flex items-start justify-between mb-4">
-            <h3 className="heading-md">{p.title}</h3>
+            <h3 className="text-pop-primary text-base font-semibold">{p.title}</h3>
             <ExternalLink size={15} className="shrink-0 mt-1" style={{ color: 'var(--text-muted)' }} />
           </div>
           <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>{p.desc}</p>
@@ -45,10 +45,10 @@ function ProjectCard({ p, index }: { p: typeof projects[number]; index: number }
 
 export default function ProjectsSection() {
   return (
-    <section className="w-full px-6 lg:px-10 section-pad" aria-label="Projects">
+    <section className="w-full px-6 lg:px-10 page-container" aria-label="Projects">
       <div className="max-w-6xl">
         <ScrollReveal>
-          <span className="section-label">My Work</span>
+          <span className="tag">My Work</span>
         </ScrollReveal>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projects.map((p, i) => (

@@ -42,7 +42,7 @@ export default function SkillsSection() {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           <div className="lg:w-1/3 shrink-0">
             <ScrollReveal>
-              <span className="section-label">Skills</span>
+              <span className="tag">Skills</span>
               <p className="text-sm max-w-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                 Technologies, certifications, and recognition.
               </p>
@@ -50,7 +50,7 @@ export default function SkillsSection() {
           </div>
           <div className="flex-1">
             <ScrollReveal>
-              <div className="card overflow-hidden !p-0">
+              <div className="card-minimal overflow-hidden !p-0">
                 <div className="flex" role="tablist" aria-label="Skills, certifications, and awards">
                   {tabs.map(tab => {
                     const Icon = tab.icon
@@ -69,7 +69,7 @@ export default function SkillsSection() {
                         <Icon size={14} aria-hidden="true" />
                         {tab.label}
                         {active === tab.id && (
-                          <motion.div layoutId="skill-tab-line" className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ backgroundColor: '#D5F74C' }} />
+                          <motion.div layoutId="skill-tab-line" className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ backgroundColor: 'rgb(var(--color-primary))' }} />
                         )}
                       </button>
                     )
@@ -90,7 +90,7 @@ export default function SkillsSection() {
                         <ul className="space-y-3">
                           {certifications.map((cert) => (
                             <li key={cert.name} className="flex items-start gap-3 text-sm" style={{ color: 'var(--text-muted)' }}>
-                              <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: '#D5F74C' }} aria-hidden="true" />
+                              <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'rgb(var(--color-primary))' }} aria-hidden="true" />
                               {'file' in cert ? (
                                 <a href={cert.file} target="_blank" rel="noopener noreferrer" className="transition-colors inline-flex items-center gap-1.5 hover:text-primary" aria-label={`${cert.name} (opens in new tab)`}>
                                   {cert.name}
@@ -106,7 +106,7 @@ export default function SkillsSection() {
                         <ul className="space-y-3">
                           {honors.map((item) => (
                             <li key={item} className="flex items-start gap-3 text-sm" style={{ color: 'var(--text-muted)' }}>
-                              <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: '#D5F74C' }} aria-hidden="true" />
+                              <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'rgb(var(--color-primary))' }} aria-hidden="true" />
                               {item}
                             </li>
                           ))}

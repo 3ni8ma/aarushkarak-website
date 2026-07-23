@@ -30,45 +30,45 @@ function getInitialTheme(): Theme {
 }
 
 function getInitialMode(): ColorMode {
-  if (typeof window === 'undefined') return 'light'
+  if (typeof window === 'undefined') return 'dark'
   const stored = localStorage.getItem(MODE_KEY) as ColorMode | null
   if (stored === 'dark' || stored === 'light') return stored
-  return 'light'
+  return 'dark'
 }
 
 const lightVars: Record<string, string> = {
   '--bg-primary': '#FFFFFF',
-  '--bg-card': '#F5F5F4',
-  '--bg-card-hover': '#EEEEEC',
-  '--text-primary': '#000000',
+  '--bg-card': '#F5F5F5',
+  '--bg-card-hover': '#EBEBEB',
+  '--text-primary': '#111111',
   '--text-muted': '#888888',
-  '--border-subtle': '#E5E5E3',
-  '--border-hover': '#D0D0CD',
-  '--glass-bg': 'rgba(255,255,255,0.85)',
-  '--glass-border': 'rgba(0,0,0,0.06)',
-  '--glass-shadow': '0 1px 3px rgba(0,0,0,0.04)',
-  '--scrollbar-track': '#F0F0EE',
-  '--nav-bg': 'rgba(255,255,255,0.85)',
-  '--nav-border': 'rgba(0,0,0,0.04)',
-  '--selection-bg': 'rgba(213,247,76,0.35)',
-  '--grain-opacity': '0.02',
+  '--border-subtle': '#E5E5E5',
+  '--border-hover': '#CCCCCC',
+  '--glass-bg': 'rgba(255,255,255,0.8)',
+  '--glass-border': 'rgba(0,0,0,0.08)',
+  '--glass-shadow': '0 2px 8px rgba(0,0,0,0.04)',
+  '--scrollbar-track': '#F0F0F0',
+  '--nav-bg': 'rgba(255,255,255,0.8)',
+  '--nav-border': 'rgba(0,0,0,0.06)',
+  '--selection-bg': 'rgba(194,164,255,0.3)',
+  '--grain-opacity': '0.008',
 }
 
 const darkVars: Record<string, string> = {
-  '--bg-primary': '#0A0A0A',
-  '--bg-card': '#141414',
-  '--bg-card-hover': '#1C1C1C',
-  '--text-primary': '#FFFFFF',
-  '--text-muted': '#777777',
-  '--border-subtle': '#1F1F1F',
-  '--border-hover': '#333333',
-  '--glass-bg': 'rgba(10,10,10,0.85)',
+  '--bg-primary': '#0b080c',
+  '--bg-card': 'rgba(255,255,255,0.04)',
+  '--bg-card-hover': 'rgba(255,255,255,0.07)',
+  '--text-primary': '#EAE5EC',
+  '--text-muted': '#ADACAC',
+  '--border-subtle': 'rgba(255,255,255,0.06)',
+  '--border-hover': 'rgba(255,255,255,0.12)',
+  '--glass-bg': 'rgba(255,255,255,0.04)',
   '--glass-border': 'rgba(255,255,255,0.06)',
-  '--glass-shadow': '0 1px 3px rgba(0,0,0,0.2)',
-  '--scrollbar-track': '#141414',
-  '--nav-bg': 'rgba(10,10,10,0.85)',
+  '--glass-shadow': '0 2px 8px rgba(0,0,0,0.2)',
+  '--scrollbar-track': 'rgba(255,255,255,0.02)',
+  '--nav-bg': 'rgba(11,8,12,0.85)',
   '--nav-border': 'rgba(255,255,255,0.04)',
-  '--selection-bg': 'rgba(213,247,76,0.35)',
+  '--selection-bg': 'rgba(194,164,255,0.35)',
   '--grain-opacity': '0.03',
 }
 

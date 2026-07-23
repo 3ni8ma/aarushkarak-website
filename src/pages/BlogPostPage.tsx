@@ -38,10 +38,10 @@ const markdownComponents: Components = {
   ),
   li: ({ children, ...props }) => <li {...props}>{children}</li>,
   a: ({ href, children, ...props }) => (
-    <a href={href} className="underline underline-offset-2 transition-colors" style={{ color: '#D5F74C' }} {...props}>{children}</a>
+    <a href={href} className="underline underline-offset-2 transition-colors" style={{ color: 'rgb(var(--color-primary))' }} {...props}>{children}</a>
   ),
   blockquote: ({ children, ...props }) => (
-    <blockquote className="border-l-2 pl-4 py-2 mb-4 text-sm italic" style={{ borderColor: '#D5F74C', color: 'var(--text-muted)' }} {...props}>{children}</blockquote>
+    <blockquote className="border-l-2 pl-4 py-2 mb-4 text-sm italic" style={{ borderColor: 'rgb(var(--color-primary))', color: 'var(--text-muted)' }} {...props}>{children}</blockquote>
   ),
   table: ({ children, ...props }) => (
     <div className="overflow-x-auto mb-4">
@@ -63,13 +63,13 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="relative w-full px-6 lg:px-10 section-pad">
+      <div className="relative w-full px-6 lg:px-10 page-container">
         <SEOHead title="Post Not Found" />
         <ScrollReveal>
-          <span className="section-label">Blog</span>
-          <h2 className="heading-lg mb-4">Post Not Found</h2>
+          <span className="tag">Blog</span>
+          <h2 className="section-heading mb-4">Post Not Found</h2>
           <p className="text-sm mb-8" style={{ color: 'var(--text-muted)' }}>The article you're looking for doesn't exist.</p>
-          <Link to="/blog" className="btn-outline !py-2 !px-5 text-xs">
+          <Link to="/blog" className="btn-primary !py-2 !px-5 text-xs">
             <ArrowLeft size={13} /> Back to blog
           </Link>
         </ScrollReveal>
@@ -82,13 +82,13 @@ export default function BlogPostPage() {
   return (
     <div className="relative">
       <SEOHead path={`/blog/${post.slug}`} title={post.title} description={post.excerpt} />
-      <div className="relative z-10 w-full px-6 lg:px-10 section-pad">
+      <div className="relative z-10 w-full px-6 lg:px-10 page-container">
         <article className="max-w-4xl">
           <ScrollReveal>
             <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider mb-8 transition-colors" style={{ color: 'var(--text-muted)' }}>
               <ArrowLeft size={12} /> Back to Blog
             </Link>
-            <h1 className="heading-lg !text-2xl sm:!text-3xl mb-4">{post.title}</h1>
+            <h1 className="section-heading !text-2xl sm:!text-3xl mb-4">{post.title}</h1>
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <span className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
                 <Calendar size={13} />
@@ -102,7 +102,7 @@ export default function BlogPostPage() {
             </div>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <div className="card">
+            <div className="card-minimal">
               <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                 {post.content}
               </ReactMarkdown>
@@ -110,10 +110,10 @@ export default function BlogPostPage() {
           </ScrollReveal>
           {relatedPosts.length > 0 && (
             <div className="mt-16 pt-10" style={{ borderTop: '1px solid var(--border-subtle)' }}>
-              <h3 className="heading-md mb-6">Related Articles</h3>
+              <h3 className="section-heading mb-6">Related Articles</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 {relatedPosts.map(rp => (
-                  <Link key={rp.slug} to={`/blog/${rp.slug}`} className="card block !p-5">
+                  <Link key={rp.slug} to={`/blog/${rp.slug}`} className="card-minimal block !p-5">
                     <h4 className="text-sm font-medium mb-1" style={{ color: 'var(--text-primary)' }}>{rp.title}</h4>
                     <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{rp.excerpt}</p>
                   </Link>
