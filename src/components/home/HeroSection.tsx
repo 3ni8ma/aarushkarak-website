@@ -54,8 +54,9 @@ export default function HeroSection() {
                 ref={nameRef}
                 className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-sans font-bold text-light leading-[1.05] mb-6 tracking-tight"
               >
-                Aarush <br className="sm:hidden" />
-                <span className="gradient-text-shimmer">Karak</span>
+                Aarush
+                <br />
+                <span className="text-accent-theme">Karak</span>
               </h1>
             </div>
 

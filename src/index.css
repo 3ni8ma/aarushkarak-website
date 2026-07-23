@@ -805,3 +805,7 @@ html[data-mode="light"] .border-white\/\[0\.03\] { border-color: var(--nav-borde
 html[data-mode="light"] .hover\:text-light { color: var(--text-primary); }
 html[data-mode="light"] .text-muted-light { color: var(--text-muted); }
 html[data-mode="light"] .bg-dark\/95\.backdrop-blur-xl { background: var(--nav-bg); }
+
+.text-accent-theme {
+  color: rgb(var(--color-accent));
+}
