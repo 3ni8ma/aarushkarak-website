@@ -228,9 +228,6 @@
   animation: float-3d 6s ease-in-out infinite;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #D5F74C, #7BC62D);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.text-accent-theme {
+    color: rgb(var(--color-accent));
 }
