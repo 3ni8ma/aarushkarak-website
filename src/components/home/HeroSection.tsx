@@ -43,7 +43,7 @@ export default function HeroSection() {
           >
             Aarush
             <br />
-            <span style={{ background: 'linear-gradient(135deg, #D5F74C, #7BC62D)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Karak</span>
+            <span className="gradient-text inline-block">Karak</span>
           </h1>
 
           <motion.p
