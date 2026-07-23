@@ -43,7 +43,7 @@ export default function HeroSection() {
           >
             Aarush
             <br />
-            <span className="gradient-text inline-block">Karak</span>
+            <span style={{ color: 'rgb(var(--color-accent))' }}>Karak</span>
           </h1>
 
           <motion.p
