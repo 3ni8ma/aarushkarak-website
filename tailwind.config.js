@@ -7,19 +7,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: '#000000',
-        paper: '#FFFFFF',
-        accent: '#D5F74C',
-        stone: '#888888',
-        charcoal: '#111111',
-        smoke: '#F5F5F4',
+        dark: '#0b080c',
+        light: '#EAE5EC',
+        muted: '#ADACAC',
+        primary: 'rgba(var(--color-primary))',
       },
       fontFamily: {
-        heading: ['Inter Tight', 'system-ui', 'sans-serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
-      },
-      borderRadius: {
-        'xl': '30px',
+        sans: ['Geist', 'system-ui', 'sans-serif'],
       },
     },
   },
