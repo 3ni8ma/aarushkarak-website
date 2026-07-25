@@ -8,6 +8,7 @@ import SkipLink from './components/layout/SkipLink'
 import ScrollTopButton from './components/layout/ScrollTopButton'
 import LoadingScreen from './components/loading/LoadingScreen'
 import SmoothScroll from './components/layout/SmoothScroll'
+import TerminalOverlay from './components/terminal/TerminalOverlay'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
@@ -35,7 +36,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 function Fallback() {
   return (
     <div className="flex items-center justify-center min-h-[60vh]" role="status" aria-label="Loading page">
-      <div className="w-6 h-6 rounded-full border-2 border-stone/30 border-t-accent animate-spin" />
+      <div className="w-6 h-6 rounded-full border-2 animate-spin" style={{ borderColor: 'var(--border-subtle)', borderTopColor: 'rgb(var(--color-primary))' }} />
       <span className="sr-only">Loading...</span>
     </div>
   )
@@ -72,6 +73,7 @@ function App() {
           <Footer />
         </SmoothScroll>
         <ScrollTopButton />
+        <TerminalOverlay />
       </div>
     </HelmetProvider>
   )
