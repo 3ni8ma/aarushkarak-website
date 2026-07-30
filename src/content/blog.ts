@@ -8,20 +8,16 @@ export interface BlogPost {
   content: string
 }
 
-import { helloWorld } from './blog/hello-world'
-import { buildingHelios } from './blog/building-helios'
-import { spatialComputing } from './blog/spatial-computing'
-import { buildingOpensourceTools } from './blog/building-opensource-tools'
-import { kaggleJourney } from './blog/kaggle-journey'
-import { fullstackFinancePlatform } from './blog/fullstack-finance-platform'
+import { astroTasks } from './blog/astro-tasks'
+import { heliosSpatial } from './blog/helios-spatial'
+import { hackatimePipeline } from './blog/hackatime-pipeline'
+import { communityOne } from './blog/communityone'
 
 const posts: BlogPost[] = [
-  helloWorld,
-  buildingHelios,
-  spatialComputing,
-  buildingOpensourceTools,
-  kaggleJourney,
-  fullstackFinancePlatform,
+  astroTasks,
+  heliosSpatial,
+  hackatimePipeline,
+  communityOne,
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
 export function getAllPosts(): BlogPost[] {
