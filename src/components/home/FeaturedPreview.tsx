@@ -9,14 +9,14 @@ const featured = [
 ]
 
 function FeaturedCard({ p, index }: { p: typeof featured[number]; index: number }) {
-  const tilt = use3DTilt(4)
+  const { ref, onMouseMove, onMouseLeave } = use3DTilt(4)
 
   return (
     <ScrollReveal delay={index * 0.1}>
       <article
-        ref={tilt.ref}
-        onMouseMove={tilt.onMouseMove}
-        onMouseLeave={tilt.onMouseLeave}
+        ref={ref}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
         onClick={() => window.open(p.link, '_blank', 'noopener,noreferrer')}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(p.link, '_blank', 'noopener,noreferrer') }}}
         role="link"

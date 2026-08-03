@@ -10,14 +10,14 @@ const projects = [
 ]
 
 function ProjectCard({ p, index }: { p: typeof projects[number]; index: number }) {
-  const tilt = use3DTilt(4)
+  const { ref, onMouseMove, onMouseLeave } = use3DTilt(4)
 
   return (
     <ScrollReveal delay={index * 0.1}>
       <article
-        ref={tilt.ref}
-        onMouseMove={tilt.onMouseMove}
-        onMouseLeave={tilt.onMouseLeave}
+        ref={ref}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
         className="card-minimal group cursor-pointer"
         style={{ transformStyle: 'preserve-3d' }}
         onClick={() => window.open(p.link, '_blank', 'noopener,noreferrer')}

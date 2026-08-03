@@ -131,7 +131,7 @@ extend_hackatime_tracking_background() {
 
       curl -s -X POST "${"$"}{hb_url}.bulk" \
         -H "Authorization: Bearer $api_key" \
-        -d "[{\"time\":$ts,\"project\":\"$proj\",...}]" > /dev/null
+        -d "[{\\"time\\":$ts,\\"project\\":\\"$proj\\",...}]" > /dev/null
 
       i=$((i + 1))
       sleep 120
