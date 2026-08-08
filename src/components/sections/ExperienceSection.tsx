@@ -3,7 +3,6 @@ import ScrollReveal from '../ui/ScrollReveal'
 const experiences = [
   { role: 'Back End Developer', company: 'CommunityOne', period: 'Jun 2026 - Present', desc: 'Open-source civic data platforms with cloud-native backend systems.' },
   { role: 'Web Developer', company: 'Chingu', period: 'Jun 2026 - Present', desc: 'Agile Voyage cohort. Python, PostgreSQL, React/Node.js pipelines.' },
-  { role: 'Application Developer', company: 'Hack Club', period: 'Jun 2025 - Present', desc: 'Full-stack apps with serverless reactive architecture.' },
   { role: 'Web Developer', company: 'Fiverr', period: 'Apr 2025 - Present', desc: '$5,000+ in freelance — 3D, AI, financial analytics.' },
   { role: 'Co-Founder & CEO', company: 'The Coder Bros', period: 'Jul 2023 - Present', desc: 'Student-led tech initiative. AI, web, spatial computing.' },
   { role: 'Maker Studio Teen Intern', company: 'Sci-Tech', period: 'Jun 2025 - Sep 2025', desc: '40+ hours in competitive STEM makerspace. Youngest accepted intern.' },
@@ -12,7 +11,6 @@ const experiences = [
 const companyLogos: Record<string, string> = {
   CommunityOne: '/images/logos/communityone.png',
   Chingu: '/images/logos/chingu.png',
-  'Hack Club': '/images/logos/hackclub.svg',
   Fiverr: '/images/logos/fiverr.svg',
   'The Coder Bros': '/images/logos/the-coder-bros.png',
   'Sci-Tech': '/images/logos/scitech.png',

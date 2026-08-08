@@ -27,8 +27,7 @@ export default function AboutSection() {
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                   I'm a Sophomore at John Fraser Secondary School and the Founder of{' '}
                   <strong style={{ color: 'var(--text-primary)' }}>The Coder Bros</strong>, a student-led tech initiative.
-                  I work as an Application Developer at{' '}
-                  <strong style={{ color: 'var(--text-primary)' }}>Hack Club</strong>, a Maker Studio Teen Intern at{' '}
+                  I work as a Maker Studio Teen Intern at{' '}
                   <strong style={{ color: 'var(--text-primary)' }}>Sci-Tech Discovery Center</strong>, and serve as{' '}
                   <strong style={{ color: 'var(--text-primary)' }}>TSA Parliamentarian</strong>.
                 </p>

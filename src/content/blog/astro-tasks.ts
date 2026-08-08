@@ -2,17 +2,15 @@ import type { BlogPost } from '../blog'
 
 export const astroTasks: BlogPost = {
   slug: 'building-astro-tasks',
-  title: 'Building astro-tasks: A Python CLI Developer Dashboard for NASA x Hack Club Stardance',
+  title: 'Building astro-tasks: A Python CLI Developer Dashboard',
   date: '2026-07-28',
-  excerpt: 'How I designed, packaged, and published a modular CLI to PyPI that integrates GitHub notifications, Hackatime coding stats, and git health checks into one pre-flight dashboard.',
-  tags: ['Python', 'CLI', 'Hack Club', 'NASA', 'Open Source'],
+  excerpt: 'How I designed, packaged, and published a modular CLI to PyPI that integrates GitHub notifications, WakaTime coding stats, and git health checks into one pre-flight dashboard.',
+  tags: ['Python', 'CLI', 'WakaTime', 'Open Source'],
   image: '/images/bg/home.jpg',
   content: `
-## The Stardance Challenge
+## Why I Built It
 
-This summer, NASA partnered with Hack Club to launch the [Stardance Challenge](https://stardance.hackclub.com/) — the largest STEM event of the summer, powered by AMD and GitHub Education. Students aged 13-18 build projects using real NASA mission data from Artemis and the James Webb Space Telescope, logging hours to earn hardware prizes: Raspberry Pis, 3D printers, and even laptops.
-
-I wanted to build something that would help other participants — and myself — stay on top of the daily coding workflow. The result is **astro-tasks**: a pre-flight checklist CLI that runs in your terminal and shows your GitHub status, coding stats, and local repo health in one place.
+Keeping on top of the daily coding workflow means checking several tools separately: GitHub notifications, coding time, and local repository health. I wanted one command that shows all of it at a glance. The result is **astro-tasks**: a pre-flight checklist CLI that runs in your terminal and shows your GitHub status, coding stats, and local repo health in one place.
 
 [View on GitHub](https://github.com/3ni8ma/astro-tasks) | [Install from PyPI](https://pypi.org/project/astro-tasks/)
 
@@ -57,13 +55,12 @@ The package is organized into five modules, each responsible for a single domain
 
 \`\`\`
 astro_tasks/
-├── __init__.py      — Version and package metadata
 ├── __main__.py      — \`python -m astro_tasks\` support
 ├── cli.py           — Argument parsing and command routing
 ├── config.py        — Shared config (repos list, WakaTime path)
 ├── display.py       — Terminal UI with colorama
 ├── github_check.py  — GitHub notifications + open PRs
-├── hackatime_check.py — WakaTime/Hackatime coding stats
+├── wakatime_check.py — WakaTime coding stats
 ├── repo_check.py    — Local git repo health scan
 └── config_check.py  — Show current configuration
 \`\`\`
@@ -85,7 +82,7 @@ def main():
     p_scan = sub.add_parser('scan', help='Scan local repos')
     p_scan.set_defaults(func=cmd_scan)
 
-    p_log = sub.add_parser('log', help='Show coding log from Hackatime')
+    p_log = sub.add_parser('log', help='Show coding log from WakaTime')
     p_log.set_defaults(func=cmd_log)
 
     p_config = sub.add_parser('config', help='Show configuration')
@@ -118,9 +115,9 @@ def get_open_prs():
 
 Why shell out instead of using PyGithub? The \`gh\` CLI is pre-authenticated with the user's GitHub token (via \`gh auth login\`), which means the tool requires zero API key configuration. It Just Works if you already have GitHub CLI set up.
 
-### Hackatime Module (hackatime_check.py)
+### WakaTime Module (wakatime_check.py)
 
-This module reads the WakaTime config file at \`~/.wakatime.cfg\` and makes a direct HTTP request to the Hackatime API. Hackatime is a Hack Club fork of WakaTime that tracks coding activity:
+This module reads the WakaTime config file at \`~/.wakatime.cfg\` and makes a direct HTTP request to the configured WakaTime API to pull coding activity:
 
 \`\`\`python
 def get_stats():
@@ -214,7 +211,7 @@ The only runtime dependency is \`colorama\` — the rest uses Python standard li
 
 ### Why a CLI?
 
-- **Zero configuration** for users who already have \`gh\` and Hackatime set up
+- **Zero configuration** for users who already have \`gh\` and WakaTime set up
 - **Composable** — each subcommand can be used independently or piped
 - **Fast** — cold start in under 200ms, no Electron process
 - **Terminal-native** — developers spend most of their time in the terminal
@@ -251,6 +248,6 @@ pip install astro-tasks
 astro check
 \`\`\`
 
-Full source on [GitHub](https://github.com/3ni8ma/astro-tasks). Built for the [NASA x Hack Club Stardance Challenge](https://stardance.hackclub.com/).
+Full source on [GitHub](https://github.com/3ni8ma/astro-tasks).
 `
 }

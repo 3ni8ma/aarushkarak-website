@@ -10,13 +10,11 @@ export interface BlogPost {
 
 import { astroTasks } from './blog/astro-tasks'
 import { heliosSpatial } from './blog/helios-spatial'
-import { hackatimePipeline } from './blog/hackatime-pipeline'
 import { communityOne } from './blog/communityone'
 
 const posts: BlogPost[] = [
   astroTasks,
   heliosSpatial,
-  hackatimePipeline,
   communityOne,
 ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
