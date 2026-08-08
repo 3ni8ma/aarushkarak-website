@@ -5,7 +5,7 @@ import ExperienceSection from '../components/sections/ExperienceSection'
 export default function ExperiencePage() {
   return (
     <div className="relative">
-      <SEOHead path="/experience" title="Experience" description="Aarush Karak's professional experience — CommunityOne, Chingu, Fiverr, The Coder Bros, and Sci-Tech." />
+      <SEOHead path="/experience" title="Experience" description="Aarush Karak's professional experience — CommunityOne, Chingu, Hack Club, Fiverr, The Coder Bros, and Sci-Tech." />
       <SceneLoader load={() => import('../components/sections/ExperienceScene')} />
       <div className="relative z-10 page-container">
         <ExperienceSection />
